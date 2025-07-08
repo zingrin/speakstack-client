@@ -6,7 +6,7 @@ const NotificationIcon = () => {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
-    axios.get("https://your-server-url/announcement-count").then((res) => {
+    axios.get("http://localhost:5000/announcement-count").then((res) => {
       setCount(res.data.count);
     });
   }, []);

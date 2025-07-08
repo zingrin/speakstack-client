@@ -14,7 +14,6 @@ const Pagination = () => {
 
   const limit = 5;
 
-  // ==== এইখানে fetchPosts ফাংশন থাকবে ====
   const fetchPosts = async () => {
     setLoading(true);
     setError(null);
@@ -25,13 +24,12 @@ const Pagination = () => {
       setHasMore(data.length === limit);
     } catch (err) {
       setError("Failed to load posts");
-      console.error("Failed to load posts", err);
-    } finally {
+      console.log("Failed to load posts", err);
+    } 
       setLoading(false);
-    }
+    
   };
 
-  // ==== useEffect-এ fetchPosts কল হবে যখন searchTerm, sortPopular বা page পরিবর্তন হবে ====
   useEffect(() => {
     fetchPosts();
   }, [searchTerm, sortPopular, page]);
