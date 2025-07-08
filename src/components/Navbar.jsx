@@ -2,6 +2,7 @@ import { Link, NavLink } from "react-router";
 import { FaBell, FaBars, FaPaw } from "react-icons/fa";
 import { useState } from "react";
 import useAuth from "../hooks/useAuth";
+import NotificationIcon from "./NotificationIcon";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -38,8 +39,8 @@ const Navbar = () => {
       {/* End: Buttons & Avatar */}
       <div className="navbar-end flex items-center gap-2">
         {/* Notification icon */}
-        <button className="btn btn-ghost btn-circle">
-          <FaBell className="text-xl" />
+        <button className="btn btn-ghost btn-circle text-green-800">
+          <NotificationIcon></NotificationIcon>
         </button>
 
         {/* Avatar or Join Us */}
