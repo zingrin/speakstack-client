@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import useAuth from "../../hooks/useAuth";
 import { Link } from "react-router";
+import useAuth from "../hooks/useAuth";
 import SocialLogin from "./SocialLogin";
 
 const Register = () => {

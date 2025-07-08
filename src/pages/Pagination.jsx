@@ -3,7 +3,7 @@ import axiosSecure from "../hooks/useAxiosSecure";
 import Banner from "../components/Banner";
 import PostCard from "../components/PostCard";
 
-const Home = () => {
+const Pagination = () => {
   const [posts, setPosts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortPopular, setSortPopular] = useState(false);
@@ -83,4 +83,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Pagination;
