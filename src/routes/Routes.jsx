@@ -11,12 +11,18 @@ import DashboardLayout from "../layouts/DashboardLayout";
 import AdminRoute from "../pages/Dashboard/Admin/AdminRoutes";
 import MakeAnnouncement from "../pages/Dashboard/Admin/MakeAnnouncement";
 import AdminProfile from "../pages/Dashboard/Admin/AdminProfile";
+import DashboardHome from "../components/DashboardHome";
+import PostList from "../components/PostList";
+import PostDetails from "../components/PostDetails";
 const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout></MainLayout>,
     children: [
-      { path: "/", element: <Home></Home> },
+            { path: "/", element: <Home></Home> },
+
+      //  { path: "/", element: <PostList /> },              
+      { path: "/post/:id", element: <PostDetails /> },  
       { path: "/allPets", element: <AllPets></AllPets> },
       { path: "/pet/:id", element: <PetDetails></PetDetails> },
       {path: "/announcements", element: <AnnouncementSection></AnnouncementSection>},
@@ -27,20 +33,30 @@ const router = createBrowserRouter([
     ],
   },
   {
-  path: "/",
+  path: "/dashboard",
   element: <DashboardLayout />,
   children: [
     {
+      index: true,
+      element: <DashboardHome />
+    },
+    {
       path: "make-announcement",
-      element:
+      element: (
         <AdminRoute>
           <MakeAnnouncement />
         </AdminRoute>
-  
+      ),
     },
-    {path: "/dashboard/admin-profile" , element: <AdminProfile></AdminProfile>}
+    {
+      path: "admin-profile",
+      element: <AdminProfile />
+    }
   ],
 }
 
-]);
+  ],
+
+
+);
 export default router;

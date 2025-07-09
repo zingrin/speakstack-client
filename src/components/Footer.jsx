@@ -9,7 +9,7 @@ const Footer = () => {
         <div className="flex flex-col items-center md:items-start">
           <Link
             to="/"
-            className="flex items-center gap-2 text-2xl font-bold text-green-900"
+            className="flex items-center gap-2 text-2xl font-bold text-blue-900"
           >
             <FaPaw className="text-3xl" />
             PawTrack
@@ -21,13 +21,13 @@ const Footer = () => {
 
         {/* Social Icons */}
         <div className="flex gap-4 text-xl">
-          <h2 className="text-2xl text-green-600">| Social </h2>
+          <h2 className="text-2xl text-blue-600">| Social </h2>
 
           <a
             href="https://facebook.com"
             target="_blank"
             rel="noreferrer"
-            className="hover:text-green-600 transition-colors duration-300 cursor-pointer"
+            className="hover:text-blue-600 transition-colors duration-300 cursor-pointer"
           >
             <FaFacebook />
           </a>
@@ -35,7 +35,7 @@ const Footer = () => {
             href="https://instagram.com"
             target="_blank"
             rel="noreferrer"
-            className="hover:text-green-600 transition-colors duration-300 cursor-pointer"
+            className="hover:text-blue-600 transition-colors duration-300 cursor-pointer"
           >
             <FaInstagram />
           </a>
@@ -43,7 +43,7 @@ const Footer = () => {
             href="https://github.com"
             target="_blank"
             rel="noreferrer"
-            className="hover:text-green-600 transition-colors duration-300 cursor-pointer"
+            className="hover:text-blue-600 transition-colors duration-300 cursor-pointer"
           >
             <FaGithub />
           </a>

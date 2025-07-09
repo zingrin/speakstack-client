@@ -43,7 +43,7 @@ const PetDetails = () => {
 
         {/* Pet Details */}
         <div>
-          <h2 className="text-3xl font-bold text-green-700 mb-4">{pet.name}</h2>
+          <h2 className="text-3xl font-bold text-blue-700 mb-4">{pet.name}</h2>
           <p className="text-gray-800 mb-2">
             <span className="font-semibold">Type:</span> {pet.type}
           </p>
@@ -68,7 +68,7 @@ const PetDetails = () => {
           {/* Back Button */}
           <Link
             to="/allPets"
-            className="inline-block mt-6 btn btn-sm bg-green-600 hover:bg-green-700 text-white"
+            className="inline-block mt-6 btn btn-sm bg-blue-600 hover:bg-blue-700 text-white"
           >
             ← Back to All Pets
           </Link>

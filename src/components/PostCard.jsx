@@ -1,88 +1,73 @@
-import React from "react";
-import { FaArrowUp, FaArrowDown, FaCommentDots, FaShareAlt } from "react-icons/fa";
 import { Link } from "react-router";
+import useAuth from "../hooks/useAuth";
+import { FacebookShareButton, FacebookIcon } from "react-share";
+import useAxiosSecure from "../hooks/useAxiosSecure";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import useCommentCount from "./useCommentCount";
 
 const PostCard = ({ post }) => {
-  const {
-    _id,
-    title,
-    description = "",
-    tags = [],
-    authorImage,
-    authorName,
-    createdAt,
-    upVote = 0,
-    downVote = 0,
-    commentCount = 0,
-  } = post;
+  const { user } = useAuth();
+  const axiosSecure = useAxiosSecure();
+  const queryClient = useQueryClient();
 
-  const totalVotes = upVote - downVote;
+  const commentCount = useCommentCount(post.title);
+  const totalVotes = (post.upVote || 0) - (post.downVote || 0);
+  const shareUrl = `${window.location.origin}/post/${post._id}`;
 
-  // Example share URL
-  const shareUrl = `${window.location.origin}/post/${_id}`;
+  const voteMutation = useMutation({
+    mutationFn: async (type) => {
+      await axiosSecure.patch(`/posts/vote/${post._id}`, { type });
+    },
+    onSuccess: () => queryClient.invalidateQueries(["posts"]),
+  });
 
   return (
-    <div className="bg-white shadow-md rounded-lg p-5 border border-gray-200 hover:shadow-lg transition-all duration-300 text-black">
-      {/* Author Info */}
-      <div className="flex items-center gap-3 mb-3">
-        <img
-          src={authorImage}
-          alt={`${authorName} avatar`}
-          className="w-10 h-10 rounded-full object-cover"
-        />
-        <div>
-          <h4 className="font-semibold text-sm">{authorName}</h4>
-          <p className="text-xs text-gray-500">{new Date(createdAt).toLocaleString()}</p>
-        </div>
+    <div className="border rounded p-4 shadow bg-white">
+      <div className="flex items-center gap-3 mb-2">
+        <img src={post.authorImage} alt="Author" className="w-10 h-10 rounded-full" />
+        <span className="font-semibold">{post.authorName}</span>
       </div>
 
-      {/* Post Title */}
-      <Link to={`/post/${_id}`}>
-        <h2 className="text-xl font-bold mb-2 text-primary hover:underline">
-          {title}
-        </h2>
+      <Link to={`/post/${post._id}`}>
+        <h3 className="text-xl font-bold hover:text-blue-600">{post.title}</h3>
       </Link>
 
-      {/* Post Description Snippet */}
-      <p className="text-gray-700 mb-4">{description.slice(0, 100)}...</p>
-
-      {/* Tags */}
-      <div className="flex flex-wrap gap-2 mb-4">
-        {tags.map((tag, idx) => (
-          <span
-            key={idx}
-            className="bg-green-100 text-green-700 px-2 py-1 rounded text-xs"
-          >
-            #{tag}
-          </span>
+      <div className="flex gap-2 mt-2 mb-1 text-sm">
+        {post.tags?.map((tag, i) => (
+          <span key={i} className="bg-gray-200 px-2 py-1 rounded">#{tag}</span>
         ))}
       </div>
 
-      {/* Footer: Vote, Comment, Share */}
-      <div className="flex justify-between items-center text-sm text-gray-700">
-        <div className="flex items-center gap-3">
-          <FaArrowUp className="text-green-500 cursor-pointer" />
-          <span>{upVote}</span>
-          <FaArrowDown className="text-red-500 cursor-pointer" />
-          <span>{downVote}</span>
-          <span className="ml-2 font-semibold">Total: {totalVotes}</span>
-        </div>
+      <p className="text-xs text-gray-500 mb-2">
+        Posted: {new Date(post.createdAt).toLocaleString()}
+      </p>
 
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-1">
-            <FaCommentDots />
-            <span>{commentCount} Comments</span>
-          </div>
+      <div className="flex flex-wrap gap-4 items-center mt-2 text-sm">
+        <span>🗨️ Comments: {commentCount}</span>
+        <span>⬆️ Upvotes: {post.upVote || 0}</span>
+        <span>⬇️ Downvotes: {post.downVote || 0}</span>
+        <span>🔥 Score: {totalVotes}</span>
 
-          <button
-            onClick={() => navigator.share ? navigator.share({ url: shareUrl }) : alert("Share not supported")}
-            aria-label="Share Post"
-            className="flex items-center gap-1 text-blue-600 hover:underline"
-          >
-            <FaShareAlt />
-            <span>Share</span>
-          </button>
-        </div>
+        {user && (
+          <>
+            <button
+              onClick={() => voteMutation.mutate("upvote")}
+              className="text-green-600 hover:underline"
+            >
+              👍 Upvote
+            </button>
+            <button
+              onClick={() => voteMutation.mutate("downvote")}
+              className="text-red-600 hover:underline"
+            >
+              👎 Downvote
+            </button>
+          </>
+        )}
+
+        <FacebookShareButton url={shareUrl}>
+          <FacebookIcon size={28} round />
+        </FacebookShareButton>
       </div>
     </div>
   );

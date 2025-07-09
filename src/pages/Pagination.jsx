@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import axiosSecure from "../hooks/useAxiosSecure";
 import Banner from "../components/Banner";
 import PostCard from "../components/PostCard";
+import useAxiosSecure from "../hooks/useAxiosSecure";
 
 const Pagination = () => {
   const [posts, setPosts] = useState([]);
@@ -11,7 +11,7 @@ const Pagination = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [hasMore, setHasMore] = useState(true);
-
+const axiosSecure = useAxiosSecure();
   const limit = 5;
 
   const fetchPosts = async () => {
@@ -20,7 +20,7 @@ const Pagination = () => {
     try {
       const query = `?page=${page}&limit=${limit}&sort=${sortPopular}&tag=${searchTerm}`;
       const { data } = await axiosSecure.get(`/posts${query}`);
-      setPosts(data);
+      setPosts(data.posts);
       setHasMore(data.length === limit);
     } catch (err) {
       setError("Failed to load posts");

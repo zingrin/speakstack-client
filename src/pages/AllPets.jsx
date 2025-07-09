@@ -44,7 +44,7 @@ const AllPets = () => {
                 />
               </figure>
               <div className="card-body p-4">
-                <h3 className="text-xl font-bold text-green-800">{pet.name}</h3>
+                <h3 className="text-xl font-bold text-blue-800">{pet.name}</h3>
                 <p className="text-sm text-gray-700">
                   <span className="font-semibold">Type:</span> {pet.type}
                 </p>
@@ -59,7 +59,7 @@ const AllPets = () => {
                 </p>
 
                 <div className="mt-4">
-                  <Link to={`/pet/${pet._id}`} className="btn btn-sm bg-green-600 hover:bg-green-700 text-white">
+                  <Link to={`/pet/${pet._id}`} className="btn btn-sm bg-blue-600 hover:bg-blue-700 text-white">
                     View Details
                   </Link>
                 </div>
