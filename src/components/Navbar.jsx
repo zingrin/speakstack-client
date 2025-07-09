@@ -14,6 +14,9 @@ const Navbar = () => {
         <NavLink to="/" className="rounded-lg">Home</NavLink>
       </li>
       <li>
+        <NavLink to="/allPets" className="rounded-lg">All Pets</NavLink>
+      </li>
+      <li>
         <NavLink to="/membership" className="rounded-lg">Membership</NavLink>
       </li>
     </>
@@ -23,8 +26,8 @@ const Navbar = () => {
     <div className="navbar bg-base-100 shadow-md px-4 sticky top-0 z-50">
       {/* Start: Logo */}
       <div className="navbar-start">
-       <Link to="/" className="flex items-center gap-2 text-xl font-bold text-primary">
-      <FaPaw className="text-2xl text-green-600" /> {/* 🐾 paw icon */}
+       <Link to="/" className="flex items-center gap-2 text-xl font-bold text-green-600">
+      <FaPaw className="text-2xl text-green-900" /> {/* 🐾 paw icon */}
       PawTrack
     </Link>
       </div>
