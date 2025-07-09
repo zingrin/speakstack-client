@@ -12,8 +12,8 @@ import AdminRoute from "../pages/Dashboard/Admin/AdminRoutes";
 import MakeAnnouncement from "../pages/Dashboard/Admin/MakeAnnouncement";
 import AdminProfile from "../pages/Dashboard/Admin/AdminProfile";
 import DashboardHome from "../components/DashboardHome";
-import PostList from "../components/PostList";
 import PostDetails from "../components/PostDetails";
+import MyProfile from "../pages/Dashboard/MyProfile";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -51,7 +51,8 @@ const router = createBrowserRouter([
     {
       path: "admin-profile",
       element: <AdminProfile />
-    }
+    },
+    { path: "my-profile", element: <MyProfile /> },
   ],
 }
 
