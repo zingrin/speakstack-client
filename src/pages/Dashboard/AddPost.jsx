@@ -1,6 +1,6 @@
 import React from 'react';
 
-const MyFollow = () => {
+const AddPost = () => {
     return (
         <div>
             
@@ -8,4 +8,4 @@ const MyFollow = () => {
     );
 };
 
-export default MyFollow;
+export default AddPost;

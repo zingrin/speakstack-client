@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ReportedPets = () => {
+const ReportedComments = () => {
     return (
         <div>
             
@@ -8,4 +8,4 @@ const ReportedPets = () => {
     );
 };
 
-export default ReportedPets;
+export default ReportedComments;

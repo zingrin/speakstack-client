@@ -1,6 +1,6 @@
 import React from 'react';
 
-const AddPet = () => {
+const MyPosts = () => {
     return (
         <div>
             
@@ -8,4 +8,4 @@ const AddPet = () => {
     );
 };
 
-export default AddPet;
+export default MyPosts;

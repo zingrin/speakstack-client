@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
-import axiosSecure from "../hooks/useAxiosSecure";
+import useAxiosSecure from "../hooks/useAxiosSecure";
 
 const AnnouncementSection = () => {
   const [announcements, setAnnouncements] = useState([]);
+  const axiosSecure = useAxiosSecure(); 
 
   useEffect(() => {
     axiosSecure.get("/announcements").then((res) => {
       setAnnouncements(res.data);
     });
-  }, []);
+  }, [axiosSecure]);
 
   if (announcements.length === 0) return null;
 

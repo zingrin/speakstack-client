@@ -1,5 +1,6 @@
 import { useState } from "react";
-import axiosSecure from "../hooks/useAxiosSecure";
+import Swal from "sweetalert2";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const MakeAnnouncement = () => {
   const [formData, setFormData] = useState({
@@ -8,28 +9,48 @@ const MakeAnnouncement = () => {
     title: "",
     description: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axiosSecure.post("/announcements", formData);
-    alert("Announcement posted!");
-    setFormData({ authorName: "", authorImage: "", title: "", description: "" });
+
+    // Basic validation
+    if (!formData.title || !formData.description) {
+      return Swal.fire("Missing Fields", "Title & description are required.", "warning");
+    }
+
+    try {
+      setLoading(true);
+      await useAxiosSecure.post("/announcements", formData);
+      Swal.fire("Success!", "Announcement posted!", "success");
+      setFormData({
+        authorName: "",
+        authorImage: "",
+        title: "",
+        description: "",
+      });
+    } catch (error) {
+      console.error("Error posting announcement:", error);
+      Swal.fire("Error", "Failed to post announcement", "error");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="max-w-xl mx-auto mt-10 p-4 border rounded shadow">
-      <h2 className="text-xl font-bold mb-4">Make an Announcement</h2>
-      <form onSubmit={handleSubmit} className="space-y-3">
+    <div className="max-w-xl mx-auto mt-10 p-6 border rounded-lg shadow bg-white">
+      <h2 className="text-2xl font-bold mb-6 text-center">📢 Make an Announcement</h2>
+      <form onSubmit={handleSubmit} className="space-y-4">
         <input
           className="input input-bordered w-full"
           type="text"
           name="authorName"
-          placeholder="Author Name"
+          placeholder="Author Name (optional)"
           value={formData.authorName}
           onChange={handleChange}
         />
@@ -37,7 +58,7 @@ const MakeAnnouncement = () => {
           className="input input-bordered w-full"
           type="text"
           name="authorImage"
-          placeholder="Author Image URL"
+          placeholder="Author Image URL (optional)"
           value={formData.authorImage}
           onChange={handleChange}
         />
@@ -45,20 +66,22 @@ const MakeAnnouncement = () => {
           className="input input-bordered w-full"
           type="text"
           name="title"
-          placeholder="Title"
+          placeholder="Announcement Title"
           value={formData.title}
           onChange={handleChange}
+          required
         />
         <textarea
           className="textarea textarea-bordered w-full"
           name="description"
-          placeholder="Description"
-          rows={3}
+          placeholder="Announcement Description"
+          rows={4}
           value={formData.description}
           onChange={handleChange}
+          required
         />
-        <button className="btn btn-primary w-full" type="submit">
-          Post Announcement
+        <button className="btn btn-primary w-full" type="submit" disabled={loading}>
+          {loading ? "Posting..." : "Post Announcement"}
         </button>
       </form>
     </div>
