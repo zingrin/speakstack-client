@@ -14,6 +14,8 @@ import AdminProfile from "../pages/Dashboard/Admin/AdminProfile";
 import DashboardHome from "../components/DashboardHome";
 import PostDetails from "../components/PostDetails";
 import MyProfile from "../pages/Dashboard/MyProfile";
+import AddPost from "../pages/Dashboard/AddPost";
+import PostList from "../components/PostList";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -21,7 +23,7 @@ const router = createBrowserRouter([
     children: [
             { path: "/", element: <Home></Home> },
 
-      //  { path: "/", element: <PostList /> },              
+       { path: "/postList", element: <PostList /> },              
       { path: "/post/:id", element: <PostDetails /> },  
       { path: "/allPets", element: <AllPets></AllPets> },
       { path: "/pet/:id", element: <PetDetails></PetDetails> },
@@ -48,6 +50,10 @@ const router = createBrowserRouter([
         </AdminRoute>
       ),
     },
+     {
+        path: "add-post",
+        element: <AddPost />,
+      },
     {
       path: "admin-profile",
       element: <AdminProfile />
