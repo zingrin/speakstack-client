@@ -64,16 +64,19 @@ const AddPost = () => {
       createdAt: new Date().toISOString(),
     };
 
-    try {
-      await axiosSecure.post("/posts", postData);
-      Swal.fire("Success", "Post added successfully", "success");
-      setTitle("");
-      setDescription("");
-      setTag("");
-      setPostCount((c) => c + 1);
-    } catch (error) {
-      Swal.fire("Error", "Failed to add post", "error");
-    }
+   try {
+  await axiosSecure.post("/posts", postData);
+  Swal.fire("Success", "Post added successfully", "success");
+
+  setTitle("");
+  setDescription("");
+  setTag("");
+
+  setPostCount((c) => c + 1);
+} catch (error) {
+  Swal.fire("Error", "Failed to add post", "error");
+}
+
   };
 
   const handleBecomeMember = () => {

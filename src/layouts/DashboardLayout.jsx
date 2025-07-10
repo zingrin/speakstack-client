@@ -105,13 +105,13 @@ const DashboardLayout = () => {
                 <NavLink to="/dashboard">📊 Dashboard Home</NavLink>
               </li>
               <li>
-                <NavLink to="/dashboard/my-profile">📦 My Profile</NavLink>
+                <NavLink to="/my-profile">📦 My Profile</NavLink>
               </li>
               <li>
-                <NavLink to="/dashboard/add-post">📦 AddPost</NavLink>
+                <NavLink to="/add-post">📦 AddPost</NavLink>
               </li>
               <li>
-                <NavLink to="/dashboard/my-posts">📝 My Posts</NavLink>
+                <NavLink to="/my-posts">📝 My Posts</NavLink>
               </li>
             </>
           )}

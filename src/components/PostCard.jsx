@@ -1,76 +1,87 @@
-import { Link } from "react-router";
-import useAuth from "../hooks/useAuth";
-import { FacebookShareButton, FacebookIcon } from "react-share";
-import useAxiosSecure from "../hooks/useAxiosSecure";
+import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import useCommentCount from "./useCommentCount";
+import useAuth from "../hooks/useAuth";
+import useAxiosSecure from "../hooks/useAxiosSecure";
+import Swal from "sweetalert2";
 
-const PostCard = ({ post }) => {
+const AddPost = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
 
-  const commentCount = useCommentCount(post.title);
-  const totalVotes = (post.upVote || 0) - (post.downVote || 0);
-  const shareUrl = `${window.location.origin}/post/${post._id}`;
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
 
-  const voteMutation = useMutation({
-    mutationFn: async (type) => {
-      await axiosSecure.patch(`/posts/vote/${post._id}`, { type });
+  const postMutation = useMutation({
+    mutationFn: async (postData) => {
+      const res = await axiosSecure.post("/posts", postData);
+      return res.data;
     },
-    onSuccess: () => queryClient.invalidateQueries(["posts"]),
+    onSuccess: () => {
+      Swal.fire("✅ Success", "Post added successfully!", "success");
+      setTitle("");
+      setDescription("");
+      queryClient.invalidateQueries(["myPosts", user?.email]);
+    },
+    onError: () => {
+      Swal.fire("❌ Error", "Failed to add post", "error");
+    },
   });
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!title || !description) {
+      Swal.fire("Warning", "Please fill all fields", "warning");
+      return;
+    }
+
+    const postData = {
+      title,
+      description,
+      upvote: 0,
+      downvote: 0,
+      userEmail: user?.email,
+    };
+
+    postMutation.mutate(postData);
+  };
+
   return (
-    <div className="border rounded p-4 shadow bg-white">
-      <div className="flex items-center gap-3 mb-2">
-        <img src={post.authorImage} alt="Author" className="w-10 h-10 rounded-full" />
-        <span className="font-semibold">{post.authorName}</span>
-      </div>
+    <div className="max-w-xl mx-auto p-4 bg-white rounded-lg shadow-md">
+      <h2 className="text-2xl font-bold mb-4">Add New Post</h2>
+      <form onSubmit={handleSubmit}>
+        <div className="mb-3">
+          <label className="block mb-1 font-medium">Post Title</label>
+          <input
+            type="text"
+            className="input input-bordered w-full"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+          />
+        </div>
 
-      <Link to={`/post/${post._id}`}>
-        <h3 className="text-xl font-bold hover:text-blue-600">{post.title}</h3>
-      </Link>
+        <div className="mb-3">
+          <label className="block mb-1 font-medium">Description</label>
+          <textarea
+            className="textarea textarea-bordered w-full"
+            rows="4"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            required
+          ></textarea>
+        </div>
 
-      <div className="flex gap-2 mt-2 mb-1 text-sm">
-        {post.tags?.map((tag, i) => (
-          <span key={i} className="bg-gray-200 px-2 py-1 rounded">#{tag}</span>
-        ))}
-      </div>
-
-      <p className="text-xs text-gray-500 mb-2">
-        Posted: {new Date(post.createdAt).toLocaleString()}
-      </p>
-
-      <div className="flex flex-wrap gap-4 items-center mt-2 text-sm">
-        <span>🗨️ Comments: {commentCount}</span>
-        <span>⬆️ Upvotes: {post.upVote || 0}</span>
-        <span>⬇️ Downvotes: {post.downVote || 0}</span>
-        <span>🔥 Score: {totalVotes}</span>
-
-        {user && (
-          <>
-            <button
-              onClick={() => voteMutation.mutate("upvote")}
-              className="text-green-600 hover:underline"
-            >
-              👍 Upvote
-            </button>
-            <button
-              onClick={() => voteMutation.mutate("downvote")}
-              className="text-red-600 hover:underline"
-            >
-              👎 Downvote
-            </button>
-          </>
-        )}
-
-        <FacebookShareButton url={shareUrl}>
-          <FacebookIcon size={28} round />
-        </FacebookShareButton>
-      </div>
+        <button
+          type="submit"
+          className="btn btn-primary w-full"
+          disabled={postMutation.isPending}
+        >
+          {postMutation.isPending ? "Posting..." : "Add Post"}
+        </button>
+      </form>
     </div>
   );
 };
 
-export default PostCard;
+export default AddPost;

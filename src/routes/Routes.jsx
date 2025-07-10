@@ -16,6 +16,7 @@ import PostDetails from "../components/PostDetails";
 import MyProfile from "../pages/Dashboard/MyProfile";
 import AddPost from "../pages/Dashboard/AddPost";
 import PostList from "../components/PostList";
+import MyPosts from "../pages/Dashboard/MyPosts";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -35,11 +36,11 @@ const router = createBrowserRouter([
     ],
   },
   {
-  path: "/dashboard",
+  path: "/",
   element: <DashboardLayout />,
   children: [
     {
-      index: true,
+      path:"/dashboard",
       element: <DashboardHome />
     },
     {
@@ -54,6 +55,7 @@ const router = createBrowserRouter([
         path: "add-post",
         element: <AddPost />,
       },
+      {path: "my-posts", element: <MyPosts></MyPosts>},
     {
       path: "admin-profile",
       element: <AdminProfile />
