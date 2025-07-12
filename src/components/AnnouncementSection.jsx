@@ -3,7 +3,7 @@ import useAxiosSecure from "../hooks/useAxiosSecure";
 
 const AnnouncementSection = () => {
   const [announcements, setAnnouncements] = useState([]);
-  const axiosSecure = useAxiosSecure(); 
+  const axiosSecure = useAxiosSecure();
 
   useEffect(() => {
     axiosSecure.get("/announcements").then((res) => {
@@ -20,11 +20,16 @@ const AnnouncementSection = () => {
         {announcements.map((item) => (
           <div key={item._id} className="border p-3 bg-white rounded">
             <div className="flex items-center gap-3 mb-1">
-              <img src={item.authorImage} alt="Author" className="w-10 h-10 rounded-full" />
+              <img
+                src={item.authorImage}
+                alt="Author"
+                className="w-10 h-10 rounded-full"
+              />
               <p className="font-semibold">{item.authorName}</p>
             </div>
             <h3 className="text-lg font-bold">{item.title}</h3>
-            <p>{item.description}</p>
+            <p>{item.message}</p>
+            <p>{item.createdAt}</p>
           </div>
         ))}
       </div>

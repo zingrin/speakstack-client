@@ -7,7 +7,7 @@ const MakeAnnouncement = () => {
     authorName: "",
     authorImage: "",
     title: "",
-    description: "",
+  message: "",
   });
   const [loading, setLoading] = useState(false);
 
@@ -32,7 +32,7 @@ const MakeAnnouncement = () => {
         authorName: "",
         authorImage: "",
         title: "",
-        description: "",
+        message: "",
       });
     } catch (error) {
       console.error("Error posting announcement:", error);

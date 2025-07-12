@@ -11,7 +11,8 @@ const Pagination = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [hasMore, setHasMore] = useState(true);
-const axiosSecure = useAxiosSecure();
+
+  const axiosSecure = useAxiosSecure();
   const limit = 5;
 
   const fetchPosts = async () => {
@@ -21,21 +22,27 @@ const axiosSecure = useAxiosSecure();
       const query = `?page=${page}&limit=${limit}&sort=${sortPopular}&tag=${searchTerm}`;
       const { data } = await axiosSecure.get(`/posts${query}`);
       setPosts(data.posts);
-      setHasMore(data.length === limit);
+      setHasMore(data.posts.length === limit);
     } catch (err) {
+      console.error("Failed to load posts", err);
       setError("Failed to load posts");
-      console.log("Failed to load posts", err);
-    } 
+    } finally {
       setLoading(false);
-    
+    }
   };
 
+  // Fetch posts whenever filter or page changes
   useEffect(() => {
     fetchPosts();
-  }, [searchTerm, sortPopular, page]);
+  }, [page, searchTerm, sortPopular]);
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setPage(1);
+  }, [searchTerm, sortPopular]);
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="max-w-6xl mx-auto px-4">
       <Banner onSearch={setSearchTerm} />
 
       <div className="text-right mb-4">

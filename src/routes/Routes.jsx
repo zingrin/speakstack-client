@@ -1,6 +1,5 @@
 import { createBrowserRouter } from "react-router";
 import MainLayout from "../layouts/MainLayout";
-import Home from "../pages/Pagination";
 import JoinUs from "../pages/JoinUs";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
@@ -17,6 +16,7 @@ import MyProfile from "../pages/Dashboard/MyProfile";
 import AddPost from "../pages/Dashboard/AddPost";
 import PostList from "../components/PostList";
 import MyPosts from "../pages/Dashboard/MyPosts";
+import Home from "../pages/Home/Home";
 const router = createBrowserRouter([
   {
     path: "/",

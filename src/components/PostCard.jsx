@@ -4,13 +4,14 @@ import useAuth from "../hooks/useAuth";
 import useAxiosSecure from "../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 
-const AddPost = () => {
+const PostCard = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [tag, setTag] = useState("");
 
   const postMutation = useMutation({
     mutationFn: async (postData) => {
@@ -21,6 +22,7 @@ const AddPost = () => {
       Swal.fire("✅ Success", "Post added successfully!", "success");
       setTitle("");
       setDescription("");
+      setTag("");
       queryClient.invalidateQueries(["myPosts", user?.email]);
     },
     onError: () => {
@@ -30,7 +32,8 @@ const AddPost = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!title || !description) {
+
+    if (!title || !description || !tag) {
       Swal.fire("Warning", "Please fill all fields", "warning");
       return;
     }
@@ -38,9 +41,16 @@ const AddPost = () => {
     const postData = {
       title,
       description,
+      tag,
       upvote: 0,
       downvote: 0,
-      userEmail: user?.email,
+      author: {
+        name: user?.displayName,
+        image: user?.photoURL,
+        email: user?.email,
+      },
+      time: new Date().toLocaleString(),
+      comments: [],
     };
 
     postMutation.mutate(postData);
@@ -72,6 +82,17 @@ const AddPost = () => {
           ></textarea>
         </div>
 
+        <div className="mb-3">
+          <label className="block mb-1 font-medium">Tag</label>
+          <input
+            type="text"
+            className="input input-bordered w-full"
+            value={tag}
+            onChange={(e) => setTag(e.target.value)}
+            required
+          />
+        </div>
+
         <button
           type="submit"
           className="btn btn-primary w-full"
@@ -84,4 +105,4 @@ const AddPost = () => {
   );
 };
 
-export default AddPost;
+export default PostCard;
