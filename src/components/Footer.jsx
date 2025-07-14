@@ -32,66 +32,56 @@ const Footer = () => {
 
         {/* Navigation */}
         <div>
-          <h4 className="text-2xl font-bold mb-2 text-blue-700">
-            | Navigation
-          </h4>
+          <h4 className="text-2xl font-bold mb-2 text-blue-700">| Navigation</h4>
           <ul className="space-y-1">
-            {["/", "/about", "/services", "/blog", "/contact"].map(
-              (path, i) => (
-                <li key={i}>
-                  <Link
-                    to={path}
-                    className="hover:text-blue-800 transition-colors duration-200 block text-xl"
-                  >
-                    {
-                      [
-                        ">Home",
-                        ">About Us",
-                        ">Services",
-                        ">Blog",
-                        ">Contact Us",
-                      ][i]
-                    }
-                  </Link>
-                </li>
-              )
-            )}
+            {["/", "/about", "/services", "/blog", "/contact"].map((path, i) => (
+              <li key={i}>
+                <Link
+                  to={path}
+                  className="hover:text-blue-800 transition-colors duration-200 block text-xl"
+                >
+                  {[
+                    ">Home",
+                    ">About Us",
+                    ">Services",
+                    ">Blog",
+                    ">Contact Us",
+                  ][i]}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
 
-        {/* Contact Info + Social Media */}
-        <div>
-          <div className="flex justify-between items-start flex-wrap gap-4">
-            {/* Contact Info */}
+        {/* Get In Touch + Social Media SIDE BY SIDE */}
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col lg:flex-row lg:items-start lg:gap-12">
+            {/* Get In Touch */}
             <div>
-              <h4 className="text-2xl font-bold mb-2 text-blue-700">
-                | Get In Touch
-              </h4>
-              <div className="flex items-center gap-2 mb-2 cursor-pointer group">
-                <FaPhoneAlt className="text-blue-600 group-hover:text-blue-800 transition duration-300" />
-                <p className="text-xl text-blue-600 group-hover:text-blue-800 transition duration-300">
+              <h4 className="text-2xl font-bold mb-2 text-blue-700">| Get In Touch</h4>
+              <div className="flex items-center gap-2 mb-2 group">
+                <FaPhoneAlt className="text-gray-600 group-hover:text-blue-800 transition duration-300" />
+                <p className="text-xl text-gray-600 group-hover:text-blue-800 transition duration-300">
                   (303) 378-8273
                 </p>
               </div>
-              <div className="flex items-center gap-2 mb-2 cursor-pointer group">
-                <FaEnvelope className="text-blue-600 group-hover:text-blue-800 transition duration-300" />
-                <p className="text-xl text-blue-600 group-hover:text-blue-800 transition duration-300">
+              <div className="flex items-center gap-2 mb-2 group">
+                <FaEnvelope className="text-gray-600 group-hover:text-blue-800 transition duration-300" />
+                <p className="text-xl text-gray-600 group-hover:text-blue-800 transition duration-300">
                   support@pawtrack.com
                 </p>
               </div>
-              <div className="flex items-center gap-2 cursor-pointer group">
-                <FaHome className="text-blue-600 group-hover:text-blue-800 transition duration-300" />
-                <p className="text-xl text-blue-600 group-hover:text-blue-800 transition duration-300">
+              <div className="flex items-center gap-2 group">
+                <FaHome className="text-gray-600 group-hover:text-blue-800 transition duration-300" />
+                <p className="text-xl text-gray-600 group-hover:text-blue-800 transition duration-300">
                   Dhaka, Bangladesh
                 </p>
               </div>
             </div>
 
-            {/* Social Media */}
-            <div className="flex flex-col items-start">
-              <h4 className="text-2xl font-bold mb-2 text-blue-700">
-                | Social Media
-              </h4>
+            {/* Social Media SIDE by Get In Touch */}
+            <div className="mt-6 lg:mt-0">
+              <h4 className="text-2xl font-bold mb-2 text-blue-700">| Social Media</h4>
               <div className="flex items-center gap-4">
                 {socialIcons.map(({ icon: Icon, url }, idx) => (
                   <a
