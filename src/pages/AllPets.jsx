@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router"; 
-import useAxiosSecure from "../hooks/useAxiosSecure";
+import axios from "axios";
+import { Link } from "react-router";
 
 const AllPets = () => {
   const [pets, setPets] = useState([]);
   const [loading, setLoading] = useState(true);
-  const axiosSecure = useAxiosSecure();
 
   useEffect(() => {
-    axiosSecure
-      .get("/pets")
+    axios
+      .get("http://localhost:5000/pets") 
       .then((res) => {
         setPets(res.data);
         setLoading(false);
@@ -18,7 +17,7 @@ const AllPets = () => {
         console.error("Failed to load pets:", err);
         setLoading(false);
       });
-  }, [axiosSecure]);
+  }, []);
 
   if (loading)
     return <div className="text-center py-10">Loading pets...</div>;
@@ -59,7 +58,10 @@ const AllPets = () => {
                 </p>
 
                 <div className="mt-4">
-                  <Link to={`/pet/${pet._id}`} className="btn btn-sm bg-blue-600 hover:bg-blue-700 text-white">
+                  <Link
+                    to={`/pet/${pet._id}`}
+                    className="btn btn-sm bg-blue-600 hover:bg-blue-700 text-white"
+                  >
                     View Details
                   </Link>
                 </div>

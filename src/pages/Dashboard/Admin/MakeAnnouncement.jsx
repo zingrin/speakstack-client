@@ -3,11 +3,12 @@ import Swal from "sweetalert2";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const MakeAnnouncement = () => {
+  const axiosSecure = useAxiosSecure(); 
   const [formData, setFormData] = useState({
     authorName: "",
     authorImage: "",
     title: "",
-  message: "",
+    description: "", 
   });
   const [loading, setLoading] = useState(false);
 
@@ -19,20 +20,24 @@ const MakeAnnouncement = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Basic validation
+    // ✅ Validation
     if (!formData.title || !formData.description) {
       return Swal.fire("Missing Fields", "Title & description are required.", "warning");
     }
 
     try {
       setLoading(true);
-      await useAxiosSecure.post("/announcements", formData);
+      const newData = {
+        ...formData,
+        createdAt: new Date(),
+      };
+      await axiosSecure.post("/announcements", newData);
       Swal.fire("Success!", "Announcement posted!", "success");
       setFormData({
         authorName: "",
         authorImage: "",
         title: "",
-        message: "",
+        description: "",
       });
     } catch (error) {
       console.error("Error posting announcement:", error);

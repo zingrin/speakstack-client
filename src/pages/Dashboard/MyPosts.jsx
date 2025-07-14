@@ -28,7 +28,7 @@ const MyPosts = () => {
     },
   });
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <p>Loading post...</p>;
 
   return (
     <div className="p-4 overflow-x-auto">
@@ -45,9 +45,9 @@ const MyPosts = () => {
           {posts.map((post) => (
             <tr key={post._id}>
               <td>{post.title}</td>
-              <td>{post.upvote - post.downvote}</td>
+              <td>{(post.upvote || 0) - (post.downvote || 0)}</td>
               <td>
-                <Link to={`/comments/${post._id}`}>
+                <Link to={`/dashboard/comments/${post._id}`}>
                   <button className="btn btn-sm btn-info">Comments</button>
                 </Link>
               </td>

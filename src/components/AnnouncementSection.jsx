@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import useAxiosSecure from "../hooks/useAxiosSecure";
+import MakeAnnouncement from "../pages/Dashboard/Admin/MakeAnnouncement";
 
 const AnnouncementSection = () => {
   const [announcements, setAnnouncements] = useState([]);
@@ -28,11 +29,12 @@ const AnnouncementSection = () => {
               <p className="font-semibold">{item.authorName}</p>
             </div>
             <h3 className="text-lg font-bold">{item.title}</h3>
-            <p>{item.message}</p>
+            <p>{item.description}</p>
             <p>{item.createdAt}</p>
           </div>
         ))}
       </div>
+      <MakeAnnouncement></MakeAnnouncement>
     </div>
   );
 };

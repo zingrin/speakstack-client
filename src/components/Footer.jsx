@@ -1,55 +1,104 @@
-import { FaFacebook, FaGithub, FaInstagram, FaPaw } from "react-icons/fa";
+import {
+  FaEnvelope,
+  FaFacebookF,
+  FaHome,
+  FaLinkedinIn,
+  FaPhoneAlt,
+} from "react-icons/fa";
 import { Link } from "react-router";
+import { FaPaw } from "react-icons/fa";
 
 const Footer = () => {
+  const socialIcons = [
+    { icon: FaFacebookF, url: "https://facebook.com" },
+    { icon: FaLinkedinIn, url: "https://linkedin.com" },
+  ];
+
   return (
-    <footer className="bg-base-200 text-base-content py-10 px-4 mt-10 border-t border-gray-300">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-        {/* Logo and Description */}
-        <div className="flex flex-col items-center md:items-start">
-          <Link
-            to="/"
-            className="flex items-center gap-2 text-2xl font-bold text-blue-900"
-          >
-            <FaPaw className="text-3xl" />
-            PawTrack
-          </Link>
-          <p className="mt-2 text-sm text-gray-500 text-center md:text-left">
-            &copy; {new Date().getFullYear()} PawTrack. All rights reserved.
-          </p>
+    <div className="bg-[#F0F8FF] text-gray-800">
+      {/* Top section */}
+      <div className="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-3 gap-8">
+        {/* Logo */}
+        <div className="md:col-span-1 flex items-center gap-2">
+          <FaPaw className="text-4xl text-blue-700" />
+          <h2 className="text-3xl font-bold text-blue-800">PawTrack</h2>
         </div>
 
-        {/* Social Icons */}
-        <div className="flex gap-4 text-xl">
-          <h2 className="text-2xl text-blue-600">| Social </h2>
+        {/* Navigation */}
+        <div>
+          <h4 className="text-2xl font-bold mb-2 text-blue-700">| Navigation</h4>
+          <ul className="space-y-1">
+            {["/", "/about", "/services", "/blog", "/contact"].map((path, i) => (
+              <li key={i}>
+                <Link
+                  to={path}
+                  className="hover:text-blue-800 transition-colors duration-200 block text-xl"
+                >
+                  {[
+                    ">Home",
+                    ">About Us",
+                    ">Services",
+                    ">Blog",
+                    ">Contact Us",
+                  ][i]}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
 
-          <a
-            href="https://facebook.com"
-            target="_blank"
-            rel="noreferrer"
-            className="hover:text-blue-600 transition-colors duration-300 cursor-pointer"
-          >
-            <FaFacebook />
-          </a>
-          <a
-            href="https://instagram.com"
-            target="_blank"
-            rel="noreferrer"
-            className="hover:text-blue-600 transition-colors duration-300 cursor-pointer"
-          >
-            <FaInstagram />
-          </a>
-          <a
-            href="https://github.com"
-            target="_blank"
-            rel="noreferrer"
-            className="hover:text-blue-600 transition-colors duration-300 cursor-pointer"
-          >
-            <FaGithub />
-          </a>
+        {/* Contact Info + Social Media */}
+        <div>
+          <div className="flex justify-between items-start flex-wrap gap-4">
+            {/* Contact Info */}
+            <div>
+              <h4 className="text-2xl font-bold mb-2 text-blue-700">| Get In Touch</h4>
+              <div className="flex items-center gap-2 mb-2 cursor-pointer group">
+                <FaPhoneAlt className="text-blue-600 group-hover:text-blue-800 transition duration-300" />
+                <p className="text-xl text-blue-600 group-hover:text-blue-800 transition duration-300">
+                  (303) 378-8273
+                </p>
+              </div>
+              <div className="flex items-center gap-2 mb-2 cursor-pointer group">
+                <FaEnvelope className="text-blue-600 group-hover:text-blue-800 transition duration-300" />
+                <p className="text-xl text-blue-600 group-hover:text-blue-800 transition duration-300">
+                  support@pawtrack.com
+                </p>
+              </div>
+              <div className="flex items-center gap-2 cursor-pointer group">
+                <FaHome className="text-blue-600 group-hover:text-blue-800 transition duration-300" />
+                <p className="text-xl text-blue-600 group-hover:text-blue-800 transition duration-300">
+                  Dhaka, Bangladesh
+                </p>
+              </div>
+            </div>
+
+            {/* Social Media */}
+            <div className="flex flex-col items-start">
+              <h4 className="text-2xl font-bold mb-2 text-blue-700">| Social Media</h4>
+              <div className="flex items-center gap-4">
+                {socialIcons.map(({ icon: Icon, url }, idx) => (
+                  <a
+                    key={idx}
+                    href={url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="w-9 h-9 flex items-center justify-center rounded-full bg-white border border-blue-300 text-blue-700 hover:text-blue-900 transition-all duration-300 shadow transform hover:-translate-y-1"
+                  >
+                    <Icon className="text-xl" />
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </footer>
+
+      {/* Bottom bar */}
+      <div className="bg-blue-700 text-white text-center py-4 text-sm">
+        © Copyright 2025 PawTrack - All Rights Reserved
+      </div>
+    </div>
   );
 };
 

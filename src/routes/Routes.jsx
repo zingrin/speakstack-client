@@ -10,62 +10,80 @@ import DashboardLayout from "../layouts/DashboardLayout";
 import AdminRoute from "../pages/Dashboard/Admin/AdminRoutes";
 import MakeAnnouncement from "../pages/Dashboard/Admin/MakeAnnouncement";
 import AdminProfile from "../pages/Dashboard/Admin/AdminProfile";
-import DashboardHome from "../components/DashboardHome";
 import PostDetails from "../components/PostDetails";
 import MyProfile from "../pages/Dashboard/MyProfile";
 import AddPost from "../pages/Dashboard/AddPost";
-import PostList from "../components/PostList";
 import MyPosts from "../pages/Dashboard/MyPosts";
 import Home from "../pages/Home/Home";
+import ManageUsers from "../pages/Dashboard/Admin/ManageUsers";
+import DashboardHome from "../components/DashboardHome";
+import PostComments from "../pages/PostComments";
+import ReportedComments from "../pages/ReportedComments";
+import AboutUs from "../components/AboutUs";
+import Blog from "../components/Blog";
 const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout></MainLayout>,
     children: [
-            { path: "/", element: <Home></Home> },
+      { path: "/", element: <Home></Home> },
 
-       { path: "/postList", element: <PostList /> },              
-      { path: "/post/:id", element: <PostDetails /> },  
+      { path: "/post/:id", element: <PostDetails /> },
       { path: "/allPets", element: <AllPets></AllPets> },
       { path: "/pet/:id", element: <PetDetails></PetDetails> },
-      {path: "/announcements", element: <AnnouncementSection></AnnouncementSection>},
+      {
+        path: "/announcements",
+        element: <AnnouncementSection></AnnouncementSection>,
+      },
       { path: "/join-us", element: <JoinUs></JoinUs> },
-      {path: "/login", element: <Login></Login>},
-      {path: "/register", element: <Register></Register>}
-     
+      { path: "/login", element: <Login></Login> },
+      { path: "/register", element: <Register></Register> },
+      {path:"about", element: <AboutUs></AboutUs>},
+      {path:"blog", element: <Blog></Blog>}
     ],
   },
+ 
+       
   {
-  path: "/",
+  path: "/dashboard",
   element: <DashboardLayout />,
   children: [
     {
-      path:"/dashboard",
+      index: true,
       element: <DashboardHome />
+    },
+    // Admin-only routes
+    {
+      path: "admin-profile",
+      element: <AdminRoute><AdminProfile /></AdminRoute>,
     },
     {
       path: "make-announcement",
+      element: <AdminRoute><MakeAnnouncement /></AdminRoute>,
+    },
+    {
+      path: "manage-user",
+      element: <AdminRoute><ManageUsers /></AdminRoute>,
+    },
+    {
+  path: "comments/:postId",
+  element: <AdminRoute> <PostComments /></AdminRoute>,},
+   {
+      path: "reported-comments",
       element: (
         <AdminRoute>
-          <MakeAnnouncement />
+          <ReportedComments />
         </AdminRoute>
       ),
     },
-     {
-        path: "add-post",
-        element: <AddPost />,
-      },
-      {path: "my-posts", element: <MyPosts></MyPosts>},
-    {
-      path: "admin-profile",
-      element: <AdminProfile />
-    },
+
+    // User routes
     { path: "my-profile", element: <MyProfile /> },
-  ],
+    { path: "add-post", element: <AddPost /> },
+    { path: "my-posts", element: <MyPosts /> },
+  ]
 }
 
-  ],
 
-
-);
+]);
 export default router;

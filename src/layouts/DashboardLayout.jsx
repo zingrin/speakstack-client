@@ -88,30 +88,28 @@ const DashboardLayout = () => {
           {isAdmin ? (
             <>
               <li>
-                <NavLink to="/dashboard">📊 Dashboard Home</NavLink>
-              </li>
-              <li>
-                <NavLink to="/dashboard/make-announcement">
-                  📢 Make Announcement
-                </NavLink>
+                <NavLink to="/dashboard/admin-profile">🧑‍💼 Admin Profile</NavLink>
               </li>
               <li>
                 <NavLink to="/dashboard/manage-users">👥 Manage Users</NavLink>
               </li>
+              <li>
+                <NavLink to="/dashboard/reported-comments">🚨 Reported Comments</NavLink>
+              </li>
+              <li>
+                <NavLink to="/dashboard/make-announcement">📢 Make Announcement</NavLink>
+              </li>
             </>
-          ) : (
+           ) : (
             <>
               <li>
-                <NavLink to="/dashboard">📊 Dashboard Home</NavLink>
+                <NavLink to="/dashboard/my-profile">👤 My Profile</NavLink>
               </li>
               <li>
-                <NavLink to="/my-profile">📦 My Profile</NavLink>
+                <NavLink to="/dashboard/add-post">➕ Add Post</NavLink>
               </li>
               <li>
-                <NavLink to="/add-post">📦 AddPost</NavLink>
-              </li>
-              <li>
-                <NavLink to="/my-posts">📝 My Posts</NavLink>
+                <NavLink to="/dashboard/my-posts">📝 My Posts</NavLink>
               </li>
             </>
           )}

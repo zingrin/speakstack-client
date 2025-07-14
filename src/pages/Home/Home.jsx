@@ -1,14 +1,17 @@
 import React from "react";
 import Banner from "../../components/Banner";
-import Pagination from "../Pagination";
 import AllPets from "../AllPets";
+import Services from "../../components/Services";
+import CustomerReviewsCarousel from "../../components/CustomerReviewsCarousel";
 
 const Home = () => {
   return (
     <div>
       <Banner></Banner>
+    {/* <AllPosts></AllPosts> */}
       <AllPets></AllPets>
-      <Pagination></Pagination>
+      <Services></Services>
+      <CustomerReviewsCarousel></CustomerReviewsCarousel>
     </div>
   );
 };
