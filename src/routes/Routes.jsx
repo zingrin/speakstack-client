@@ -21,6 +21,7 @@ import PostComments from "../pages/PostComments";
 import ReportedComments from "../pages/ReportedComments";
 import AboutUs from "../components/AboutUs";
 import Blog from "../components/Blog";
+import ContactUs from "../components/ContactUs";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -39,7 +40,8 @@ const router = createBrowserRouter([
       { path: "/login", element: <Login></Login> },
       { path: "/register", element: <Register></Register> },
       {path:"about", element: <AboutUs></AboutUs>},
-      {path:"blog", element: <Blog></Blog>}
+      {path:"blog", element: <Blog></Blog>},
+      {path: "contact", element: <ContactUs></ContactUs>}
     ],
   },
  
