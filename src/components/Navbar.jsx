@@ -10,15 +10,58 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAdmin] = useAdmin();
 
-  // ✅ Corrected ternary logic
   const dashboardLink = isAdmin ? "/dashboard/admin-profile" : "/dashboard/my-profile";
 
   const navLinks = (
     <>
-      <li><NavLink to="/" className="rounded-lg">Home</NavLink></li>
-      <li><NavLink to="/allPets" className="rounded-lg">All Pets</NavLink></li>
-      <li><NavLink to={dashboardLink} className="rounded-lg">Dashboard</NavLink></li>
-      <li><NavLink to="/membership" className="rounded-lg">Membership</NavLink></li>
+      <li>
+        <NavLink
+          to="/"
+          className={({ isActive }) =>
+            `rounded-lg block text-xl transition-colors duration-200 ${
+              isActive ? "text-blue-800 font-semibold" : "text-gray-700 hover:text-blue-800"
+            }`
+          }
+        >
+          Home
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/allPets"
+          className={({ isActive }) =>
+            `rounded-lg block text-xl transition-colors duration-200 ${
+              isActive ? "text-blue-800 font-semibold" : "text-gray-700 hover:text-blue-800"
+            }`
+          }
+        >
+          All Pets
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to={dashboardLink}
+          className={({ isActive }) =>
+            `rounded-lg block text-xl transition-colors duration-200 ${
+              isActive ? "text-blue-800 font-semibold" : "text-gray-700 hover:text-blue-800"
+            }`
+          }
+        >
+          Dashboard
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/membership"
+          className={({ isActive }) =>
+            `rounded-lg block text-xl transition-colors duration-200 ${
+              isActive ? "text-blue-800 font-semibold" : "text-gray-700 hover:text-blue-800"
+            }`
+          }
+        >
+          Membership
+        </NavLink>
+      </li>
     </>
   );
 
@@ -36,12 +79,10 @@ const Navbar = () => {
       </div>
 
       <div className="navbar-end flex items-center gap-2">
-        {/* 🔔 Notification Icon */}
         <button className="btn btn-ghost btn-circle text-blue-800">
           <NotificationIcon />
         </button>
 
-        {/* 👤 Avatar / Join Us */}
         {user ? (
           <div className="dropdown dropdown-end">
             <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
@@ -49,10 +90,19 @@ const Navbar = () => {
                 <img src={user.photoURL || "/avatar.png"} alt="User" />
               </div>
             </div>
-            <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[10] p-2 shadow bg-base-100 rounded-box w-52">
-              <li><p className="text-gray-600">{user.displayName}</p></li>
-              <li><Link to={dashboardLink}>Dashboard</Link></li>
-              <li><button onClick={logOut}>Logout</button></li>
+            <ul
+              tabIndex={0}
+              className="menu menu-sm dropdown-content mt-3 z-[10] p-2 shadow bg-base-100 rounded-box w-52"
+            >
+              <li>
+                <p className="text-gray-600">{user.displayName}</p>
+              </li>
+              <li>
+                <Link to={dashboardLink}>Dashboard</Link>
+              </li>
+              <li>
+                <button onClick={logOut}>Logout</button>
+              </li>
             </ul>
           </div>
         ) : (
@@ -64,7 +114,6 @@ const Navbar = () => {
           </Link>
         )}
 
-        {/* 📱 Mobile toggle button */}
         <div className="lg:hidden">
           <button
             className="btn btn-ghost btn-circle"
@@ -75,7 +124,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* 📱 Mobile menu dropdown */}
       {isMenuOpen && (
         <div className="lg:hidden absolute top-full right-4 mt-2 bg-base-100 shadow rounded-box z-50 w-48">
           <ul className="menu p-2 space-y-1">{navLinks}</ul>
