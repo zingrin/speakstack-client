@@ -4,21 +4,21 @@ const blogPosts = [
   {
     id: 1,
     title: "5 Essential Tips for First-Time Pet Owners",
-    image: "https://i.ibb.co/gDPpz94/pet-tip.jpg",
+    image: "https://i.ibb.co/W4Z2JHJS/picture-talented-professional-young-woman-designer-shirt-khaki-color-sitting-her-workshop-sketching.jpg",
     date: "July 12, 2025",
     excerpt: "New to pet parenting? Here are 5 essential tips to get you started on the right paw...",
   },
   {
     id: 2,
     title: "How to Handle Pet Anxiety During Thunderstorms",
-    image: "https://i.ibb.co/zs9tFyG/pet-anxiety.jpg",
+    image: "https://i.ibb.co/HRbPn76/images-q-tbn-ANd9-Gc-SAx-Vhadebbz4-YEU4a-Nr9-W4-XZJo-Bn-Ke-LH8-Ya-Ksz-An-Pt5ycs-C-ow-Tf-Zxxd-RSQY-0.jpg",
     date: "July 9, 2025",
     excerpt: "Thunderstorms can be terrifying for pets. Discover simple ways to keep them calm and safe...",
   },
   {
     id: 3,
     title: "Best Homemade Pet Treat Recipes",
-    image: "https://i.ibb.co/3CmN7fF/pet-treats.jpg",
+    image: "https://i.ibb.co/nNpbgrv6/133123-Peanut-Butter-and-Pumpkin-Dog-Treats-mfs-012-52ab3711d2954226a640adebcb2f0969.jpg",
     date: "July 5, 2025",
     excerpt: "Want to spoil your furry friend with love and food? Here are 3 healthy treat recipes...",
   },
@@ -38,7 +38,7 @@ const Blog = () => {
             <img
               src={post.image}
               alt={post.title}
-              className="w-full h-48 object-cover rounded-t-lg"
+              className="w-full aspect-[4/3] object-cover rounded-t-lg"
             />
             <div className="p-4">
               <h3 className="text-xl font-semibold text-blue-700 mb-1">{post.title}</h3>
