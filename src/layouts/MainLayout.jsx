@@ -1,16 +1,18 @@
-import React from 'react';
-import Navbar from '../components/Navbar';
-import { Outlet } from 'react-router';
-import Footer from '../components/Footer';
+import { Outlet } from "react-router";
+import Navbar from "../components/ui/Navbar";
+import Footer from "../components/ui/Footer";
 
 const MainLayout = () => {
-    return (
-        <div>
-           <Navbar></Navbar>
-           <Outlet></Outlet>
-           <Footer></Footer>
-        </div>
-    );
+  return (
+    <div className="flex flex-col min-h-screen">
+      <Navbar />
+
+      <main className="flex-grow">
+        <Outlet /> {/* All pages will render here */}
+      </main>
+    <Footer></Footer>
+    </div>
+  );
 };
 
 export default MainLayout;
