@@ -1,24 +1,27 @@
 import React, { useState, useEffect } from "react";
+import Swal from "sweetalert2";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import useAuth from "../../../hooks/useAuth";
 
 const AddPost = () => {
-  // ফেক ইউজার পোস্ট কাউন্ট (পরে API থেকে আনতে হবে)
   const [postCount, setPostCount] = useState(0);
-
-  // ফেক মেম্বার স্টেট
   const [isMember, setIsMember] = useState(false);
-
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     tag: "",
   });
 
+  const axiosSecure = useAxiosSecure();
+  const { user } = useAuth(); // user.email এর জন্য
+
   useEffect(() => {
-    // এখানে API কল করে ইউজারের পোস্ট কাউন্ট ও মেম্বার স্ট্যাটাস আনবেন
-    // উদাহরণ সরুপ:
-    setPostCount(3);
-    setIsMember(false);
-  }, []);
+    // POST count and membership status আনো
+    axiosSecure.get(`/user/post-info?email=${user?.email}`).then((res) => {
+      setPostCount(res.data.count);
+      setIsMember(res.data.isMember);
+    });
+  }, [user?.email, axiosSecure]);
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -27,29 +30,43 @@ const AddPost = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: পোস্ট সাবমিট API কল করো এখানে
-    alert("Post submitted: " + JSON.stringify(formData));
-    // সাবমিটের পর ফর্ম ক্লিয়ার করতে পারো
-    setFormData({
-      title: "",
-      description: "",
-      tag: "",
-    });
+
+    const postData = {
+      title: formData.title,
+      content: formData.description,
+      tags: [formData.tag],
+      author: {
+        name: user?.displayName || "Anonymous",
+        image: user?.photoURL || "",
+        email: user?.email,
+      },
+      time: new Date(),
+      upVote: 0,
+      downVote: 0,
+    };
+
+    try {
+      const res = await axiosSecure.post("/posts", postData);
+      if (res.data.insertedId) {
+        Swal.fire("Success!", "Post submitted successfully!", "success");
+        setFormData({ title: "", description: "", tag: "" });
+      }
+    } catch (err) {
+      Swal.fire("Error", "Failed to submit post", "error");
+    }
   };
 
-  // যদি নরমাল ইউজার 5 এর বেশি পোস্ট করে থাকে তবে মেম্বার হওয়ার জন্য প্রম্পট দেখাবে
   if (!isMember && postCount >= 5) {
     return (
       <div className="max-w-xl mx-auto p-6 bg-white rounded shadow-md text-center">
         <h2 className="text-2xl font-semibold mb-4">Post Limit Reached</h2>
-        <p className="mb-6">You have reached your 5 post limit. Become a member to add more posts.</p>
+        <p className="mb-6">
+          You have reached your 5 post limit. Become a member to add more posts.
+        </p>
         <button
-          onClick={() => {
-            // Membership পেজে রিডাইরেক্ট (react-router এর useNavigate ব্যবহার করতে পারো)
-            window.location.href = "/membership";
-          }}
+          onClick={() => (window.location.href = "/membership")}
           className="btn btn-primary"
         >
           Become a Member

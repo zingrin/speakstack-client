@@ -1,40 +1,48 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router";
+import Swal from "sweetalert2";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const MyPosts = () => {
-  // ফেক পোস্ট ডাটা (পরে API থেকে আনবে)
   const [posts, setPosts] = useState([]);
+  const navigate = useNavigate();
+  const axiosSecure = useAxiosSecure();
 
   useEffect(() => {
-    // এখানে API কল করে ইউজারের পোস্ট আনবে
-    // উদাহরণ সরুপ:
-    setPosts([
-      {
-        id: "1",
-        title: "How to start with React?",
-        upVote: 10,
-        downVote: 2,
-        commentsCount: 4,
-      },
-      {
-        id: "2",
-        title: "Firebase auth issues",
-        upVote: 5,
-        downVote: 1,
-        commentsCount: 2,
-      },
-    ]);
-  }, []);
+    axiosSecure
+      .get("/posts")
+      .then((res) => {
+        console.log("API Response:", res.data);
+        setPosts(res.data.posts);
+      })
+      .catch((err) => console.error("Failed to fetch posts", err));
+  }, [axiosSecure]);
 
-  const handleDelete = (id) => {
-    // TODO: API কল করে পোস্ট ডিলিট করো
-    if (window.confirm("Are you sure you want to delete this post?")) {
-      setPosts((prev) => prev.filter((post) => post.id !== id));
+  const handleDelete = async (id) => {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await axiosSecure.delete(`/posts/${id}`);
+        setPosts((prev) => prev.filter((post) => post._id !== id));
+        Swal.fire("Deleted!", "Your post has been deleted.", "success");
+      } catch (err) {
+        console.error("Delete failed", err);
+        Swal.fire("Error", "Failed to delete the post.", "error");
+      }
     }
   };
 
   const handleViewComments = (id) => {
-    // TODO: রিডাইরেক্ট করো /comments/{postId} পেজে
-    window.location.href = `/comments/${id}`;
+    navigate(`/comments/${id}`);
   };
 
   return (
@@ -54,20 +62,20 @@ const MyPosts = () => {
               </tr>
             </thead>
             <tbody>
-              {posts.map(({ id, title, upVote, downVote, commentsCount }) => (
-                <tr key={id}>
+              {posts.map(({ _id, title, upVote = 0, downVote = 0, commentsCount = 0 }) => (
+                <tr key={_id}>
                   <td>{title}</td>
                   <td>{upVote - downVote}</td>
                   <td>{commentsCount}</td>
                   <td className="space-x-2">
                     <button
-                      onClick={() => handleViewComments(id)}
+                      onClick={() => handleViewComments(_id)}
                       className="btn btn-sm btn-info"
                     >
                       Comments
                     </button>
                     <button
-                      onClick={() => handleDelete(id)}
+                      onClick={() => handleDelete(_id)}
                       className="btn btn-sm btn-error"
                     >
                       Delete

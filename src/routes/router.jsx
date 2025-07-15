@@ -20,55 +20,69 @@ import ContactUs from "../components/ContactUs";
 import Services from "../components/Services";
 import Login from "../pages/authentication/Login";
 import Register from "../pages/authentication/Register";
+import CommentsPage from "../components/comments/CommentsPage";
 
 const router = createBrowserRouter([
-    {
+  {
     path: "/",
     element: <MainLayout />,
     children: [
       { path: "/", element: <Home /> },
       { path: "/join", element: <JoinUs /> },
-       {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "/register",
-    element: <Register />,
-  },
-      { path: "/membership", element: <PrivateRoute><Membership /></PrivateRoute> },
+      {
+        path: "/login",
+        element: <Login />,
+      },
+      {
+        path: "/register",
+        element: <Register />,
+      },
+      {
+        path: "/membership",
+        element: (
+          <PrivateRoute>
+            <Membership />
+          </PrivateRoute>
+        ),
+      },
       { path: "/post/:id", element: <PostDetails /> },
-      {path: "/about",element: <AboutUs></AboutUs>},
-      {path:"/contact", element:<ContactUs></ContactUs>},
-      {path:"/services", element: <Services></Services>}
+      { path: "/about", element: <AboutUs></AboutUs> },
+      { path: "/contact", element: <ContactUs></ContactUs> },
+      { path: "/services", element: <Services></Services> },
+      {
+        path: "/comments/:postId",
+        element: (
+          <PrivateRoute>
+            <CommentsPage />
+          </PrivateRoute>
+        ),
+      },
     ],
   },
   {
     path: "dashboard",
-  element: <DashboardLayout />,  
- children: [
-          {
-            path: "user",
-            element: <UserDashboardLayout />,
-            children: [
-              { path: "profile", element: <Profile /> },
-              { path: "add-post", element: <AddPost /> },
-              { path: "my-posts", element: <MyPosts /> },
-            ],
-          },
-          {
-            path: "admin",
-            element: <AdminDashboardLayout />,
-            children: [
-              { path: "users", element: <Users /> },
-              { path: "reports", element: <Reports /> },
-              { path: "announcement", element: <Announcement /> },
-            ],
-              },
+    element: <DashboardLayout />,
+    children: [
+      {
+        path: "user",
+        element: <UserDashboardLayout />,
+        children: [
+          { path: "profile", element: <Profile /> },
+          { path: "add-post", element: <AddPost /> },
+          { path: "my-posts", element: <MyPosts /> },
         ],
-    
-      }
-
+      },
+      {
+        path: "admin",
+        element: <AdminDashboardLayout />,
+        children: [
+          { path: "users", element: <Users /> },
+          { path: "reports", element: <Reports /> },
+          { path: "announcement", element: <Announcement /> },
+        ],
+      },
+    ],
+  },
 ]);
 
 export default router;

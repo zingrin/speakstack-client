@@ -1,39 +1,8 @@
 import { useParams } from "react-router";
 import { useState, useEffect } from "react";
 import { FaUserCircle, FaComments, FaThumbsUp, FaThumbsDown } from "react-icons/fa";
-
-const dummyPosts = [
-  {
-    _id: "1",
-    title: "How to start with React?",
-    content:
-      "React is a JavaScript library for building user interfaces. It allows you to create reusable UI components...",
-    author: {
-      name: "Jerin",
-      image: "https://i.ibb.co/3FfR4yL/user1.png",
-    },
-    tags: ["react", "beginner"],
-    time: "2025-07-15T08:30:00Z",
-    upVote: 10,
-    downVote: 2,
-    comments: 4,
-  },
-  {
-    _id: "2",
-    title: "Firebase auth issues",
-    content:
-      "When working with Firebase Authentication, sometimes you might encounter issues like token expiration...",
-    author: {
-      name: "Tonmoy",
-      image: "https://i.ibb.co/3FfR4yL/user1.png",
-    },
-    tags: ["firebase", "auth"],
-    time: "2025-07-14T10:00:00Z",
-    upVote: 5,
-    downVote: 1,
-    comments: 2,
-  },
-];
+import Swal from "sweetalert2";
+import useAxiosSecure from "../hooks/useAxiosSecure";
 
 function formatDate(dateStr) {
   const date = new Date(dateStr);
@@ -43,19 +12,47 @@ function formatDate(dateStr) {
 const PostDetails = () => {
   const { postId } = useParams();
   const [post, setPost] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const axiosSecure = useAxiosSecure();
 
   useEffect(() => {
-    // এখানে তুমি API call করতে পারো। এখন ডামি ডাটা থেকে খুঁজছি।
-    const foundPost = dummyPosts.find((p) => p._id === postId);
-    setPost(foundPost);
-  }, [postId]);
+    if (postId) {
+      axiosSecure
+        .get(`/posts/${postId}`)
+        .then((res) => {
+          if (res.data) {
+            setPost(res.data);
+          } else {
+            Swal.fire({
+              icon: "warning",
+              title: "Not Found",
+              text: "This post does not exist.",
+            });
+          }
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.error("Failed to fetch post:", err);
+          setLoading(false);
+          Swal.fire({
+            icon: "error",
+            title: "Oops!",
+            text: "Something went wrong while fetching the post.",
+          });
+        });
+    }
+  }, [postId, axiosSecure]);
 
-  if (!post) {
+  if (loading) {
     return (
       <div className="max-w-4xl mx-auto p-4 text-center">
-        <p>Post not found.</p>
+        <p>Loading post...</p>
       </div>
     );
+  }
+
+  if (!post) {
+    return null; 
   }
 
   return (
@@ -63,7 +60,7 @@ const PostDetails = () => {
       <h1 className="text-3xl font-bold mb-2">{post.title}</h1>
 
       <div className="flex items-center mb-4 space-x-4">
-        {post.author.image ? (
+        {post.author?.image ? (
           <img
             src={post.author.image}
             alt={post.author.name}
@@ -73,7 +70,7 @@ const PostDetails = () => {
           <FaUserCircle className="w-12 h-12 text-gray-400" />
         )}
         <div>
-          <p className="font-semibold">{post.author.name}</p>
+          <p className="font-semibold">{post.author?.name}</p>
           <p className="text-sm text-gray-500">{formatDate(post.time)}</p>
         </div>
       </div>
@@ -83,11 +80,8 @@ const PostDetails = () => {
       </div>
 
       <div className="mb-4 flex flex-wrap gap-2">
-        {post.tags.map((tag) => (
-          <span
-            key={tag}
-            className="badge badge-outline cursor-pointer"
-          >
+        {post.tags?.map((tag) => (
+          <span key={tag} className="badge badge-outline cursor-pointer">
             #{tag}
           </span>
         ))}
@@ -104,7 +98,7 @@ const PostDetails = () => {
         </div>
         <div className="flex items-center space-x-1">
           <FaComments />
-          <span>{post.comments} Comments</span>
+          <span>{post.commentsCount || 0} Comments</span>
         </div>
       </div>
     </div>

@@ -1,6 +1,12 @@
 import React, { useState } from "react";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const Announcement = () => {
+  const axiosSecure = useAxiosSecure();
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     authorName: "",
     authorImage: "",
@@ -12,16 +18,42 @@ const Announcement = () => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: API কল করে অ্যানাউন্সমেন্ট সার্ভারে পাঠাবে
-    alert("Announcement submitted!");
-    setFormData({
-      authorName: "",
-      authorImage: "",
-      title: "",
-      description: "",
-    });
+
+    const dataToSend = {
+      ...formData,
+      date: new Date().toISOString(),
+    };
+
+    try {
+      const res = await axiosSecure.post("/announcements", dataToSend);
+
+      Swal.fire({
+        icon: "success",
+        title: "Announcement submitted!",
+        timer: 2000,
+        showConfirmButton: false,
+      }).then(() => {
+        navigate("/announcements"); // ✅ Redirect to announcements section
+      });
+
+      setFormData({
+        authorName: "",
+        authorImage: "",
+        title: "",
+        description: "",
+      });
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error!",
+        text:
+          error.response?.data?.error ||
+          error.message ||
+          "Something went wrong",
+      });
+    }
   };
 
   return (
