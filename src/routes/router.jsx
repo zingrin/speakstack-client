@@ -21,6 +21,11 @@ import Services from "../components/Services";
 import Login from "../pages/authentication/Login";
 import Register from "../pages/authentication/Register";
 import CommentsPage from "../components/comments/CommentsPage";
+import AnnouncementsSection from "../components/ui/AnnouncementsSection";
+import Notification from "../components/Notification";
+import PostPages from "../components/posts/PostPages";
+import AllCourses from "../pages/AllCourses";
+import PopularCourses from "../components/PopularCourses";
 
 const router = createBrowserRouter([
   {
@@ -37,6 +42,7 @@ const router = createBrowserRouter([
         path: "/register",
         element: <Register />,
       },
+      {path:"all-course", element:<AllCourses></AllCourses> },
       {
         path: "/membership",
         element: (
@@ -46,9 +52,13 @@ const router = createBrowserRouter([
         ),
       },
       { path: "/post/:id", element: <PostDetails /> },
+      {path:"post-page", element: <PostPages></PostPages>},
       { path: "/about", element: <AboutUs></AboutUs> },
       { path: "/contact", element: <ContactUs></ContactUs> },
       { path: "/services", element: <Services></Services> },
+      {path: "/announcements", element: <AnnouncementsSection></AnnouncementsSection>},
+      {path:"notification/:id", element: <Notification></Notification>},
+      {path: "popular", element:<PopularCourses></PopularCourses>},
       {
         path: "/comments/:postId",
         element: (

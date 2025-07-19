@@ -6,6 +6,10 @@ import SortControl from "../components/home/SortControl";
 import PostList from "../components/home/PostList";
 import Pagination from "../components/home/Pagination";
 import WhyChooseUs from "../components/WhyChooseUs";
+import CourseCard from "../components/posts/CourseCard";
+import NewCourses from "../components/NewCourses";
+import allCourses from "../data/AllCourses";
+import PopularCourses from "../components/PopularCourses";
 
 
 const Home = () => {
@@ -13,8 +17,7 @@ const Home = () => {
   const [sortBy, setSortBy] = useState("newest");
   const [page, setPage] = useState(1);
 
-  // Assume fetched via React Query
-  const posts = []; // replace with real data
+  
   const tags = ["React", "MERN", "Auth"];
   const announcements = [];
 
@@ -22,10 +25,14 @@ const Home = () => {
     <>
       <Banner onSearch={setSearch} />
       <TagFilter tags={tags} onTagClick={setSearch} />
+      <CourseCard></CourseCard>
+      <PopularCourses></PopularCourses>
+            <NewCourses allCourses={allCourses} />
+
       <AnnouncementList announcements={announcements} />
-      <SortControl sortBy={sortBy} setSortBy={setSortBy} />
-      <PostList posts={posts} />
-      <Pagination page={page} totalPages={5} onPageChange={setPage} />
+      {/* <SortControl sortBy={sortBy} setSortBy={setSortBy} /> */}
+      {/* <PostList posts={posts} /> */}
+      {/* <Pagination page={page} totalPages={5} onPageChange={setPage} /> */}
       <WhyChooseUs></WhyChooseUs>
     </>
   );

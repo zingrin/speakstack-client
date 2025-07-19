@@ -1,4 +1,4 @@
-import PostCard from "../posts/PostCard";
+import PostCard from "../posts/CourseCard";
 
 const PostList = ({ posts }) => {
   if (!posts || posts.length === 0) {

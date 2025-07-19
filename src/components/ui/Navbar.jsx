@@ -21,6 +21,16 @@ const Navbar = () => {
       </li>
       <li>
         <NavLink
+          to="/all-course"
+          className={({ isActive }) =>
+            isActive ? "font-semibold text-primary" : "hover:text-primary"
+          }
+        >
+          All Course
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
           to="/membership"
           className={({ isActive }) =>
             isActive ? "font-semibold text-primary" : "hover:text-primary"
@@ -109,9 +119,7 @@ const Navbar = () => {
           {user && (
             <>
               {/* Notification Icon */}
-              <button className="btn btn-ghost btn-circle relative">
                 <Notification />
-              </button>
 
               {/* Profile Dropdown */}
               <div className="dropdown dropdown-end">

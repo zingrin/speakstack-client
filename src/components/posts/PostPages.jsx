@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import PostList from "./PostList";
-import LoadingSpinner from "./LoadingSpinner";
+import { Link } from "react-router"; 
+import PostList from "./PostsList";
+import LoadingSpinner from "../ui/LoadingSpinner";
 
 const PostPages = () => {
   const [posts, setPosts] = useState([]);
@@ -11,10 +12,11 @@ const PostPages = () => {
     const fetchPosts = async () => {
       try {
         setLoading(true);
-        // Replace with actual API call
         const response = await fetch("/api/posts");
         const data = await response.json();
-        setPosts(data.posts);
+console.log("Fetched Posts:", data);
+        // ✅ Adjust based on actual API shape:
+        setPosts(data.posts || data); 
       } catch (err) {
         setError("Failed to load posts. Please try again later.");
         console.error(err);
@@ -26,7 +28,7 @@ const PostPages = () => {
     fetchPosts();
   }, []);
 
-  if (loading) return <LoadingSpinner />;
+  if (loading) return <LoadingSpinner></LoadingSpinner>;
   if (error) return <div className="alert alert-error">{error}</div>;
 
   return (

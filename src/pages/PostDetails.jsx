@@ -1,8 +1,14 @@
 import { useParams } from "react-router";
 import { useState, useEffect } from "react";
-import { FaUserCircle, FaComments, FaThumbsUp, FaThumbsDown } from "react-icons/fa";
+import {
+  FaUserCircle,
+  FaComments,
+  FaThumbsUp,
+  FaThumbsDown,
+} from "react-icons/fa";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../hooks/useAxiosSecure";
+import CommentsPage from "../components/comments/CommentsPage";
 
 function formatDate(dateStr) {
   const date = new Date(dateStr);
@@ -51,9 +57,7 @@ const PostDetails = () => {
     );
   }
 
-  if (!post) {
-    return null; 
-  }
+  if (!post) return null;
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md">
@@ -100,6 +104,12 @@ const PostDetails = () => {
           <FaComments />
           <span>{post.commentsCount || 0} Comments</span>
         </div>
+      </div>
+
+      {/* 🔽 Comment Section */}
+      <div className="mt-8">
+        <h2 className="text-xl font-semibold mb-4">Comments</h2>
+        <CommentsPage postId={postId} />
       </div>
     </div>
   );

@@ -1,24 +1,51 @@
-import PostCard from "./PostCard";
+import { useQuery } from "@tanstack/react-query";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import CourseCard from "./CourseCard";
 
-const PostList = ({ posts }) => {
-  if (!posts || posts.length === 0) {
-    return (
-      <div className="text-center py-12">
-        <div className="text-5xl mb-4">📭</div>
-        <h3 className="text-xl font-semibold mb-2">No posts found</h3>
-        <p className="text-gray-500 mb-4">Be the first to create a post!</p>
-        <Link to="/posts/new" className="btn btn-primary">
-          Create Post
-        </Link>
-      </div>
-    );
-  }
+const PostList = () => {
+  const axiosSecure = useAxiosSecure();
+
+  const {
+    data: courses = [],
+    isLoading,
+    isError,
+    refetch,
+  } = useQuery({
+    queryKey: ["popularCourses"],
+    queryFn: async () => {
+      const res = await axiosSecure.get("/courses/popular"); 
+      return res.data;
+    },
+  });
+
+  const handleCommentUpdate = async (id, updatedComment) => {
+    try {
+      await axiosSecure.patch(`/courses/comment/${id}`, { comment: updatedComment });
+      refetch(); // update UI after comment edit
+    } catch (err) {
+      console.error("Failed to update comment:", err);
+    }
+  };
+
+  if (isLoading) return <div className="text-center mt-10 text-lg">Loading popular courses...</div>;
+  if (isError) return <div className="text-center mt-10 text-red-500">Failed to load courses</div>;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {posts.map((post) => (
-        <PostCard key={post._id} post={post} />
-      ))}
+    <div className="py-10 px-4 md:px-10 bg-[#0f172a] min-h-screen">
+      <h1 className="text-3xl font-bold text-white mb-8 text-center">🔥 Popular Courses</h1>
+      <div className="flex flex-wrap gap-6 justify-center">
+        {courses.length > 0 ? (
+          courses.map((course) => (
+            <CourseCard
+              key={course._id}
+              course={course}
+              onUpdateComment={handleCommentUpdate}
+            />
+          ))
+        ) : (
+          <p className="text-gray-300">No popular courses found.</p>
+        )}
+      </div>
     </div>
   );
 };
