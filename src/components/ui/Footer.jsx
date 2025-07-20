@@ -20,16 +20,15 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row gap-10 md:gap-16 flex-grow justify-end w-full md:w-auto">
           {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
-            <ul className="space-y-2 text-sm">
+            <h3 className="text-lg font-semibold mb-4 text-blue-600">| Quick Links</h3>
+            <ul className="space-y-2 text-lg font-semi-bold">
               {[
-                { name: "Home", to: "/" },
-                { name: "About Us", to: "/about" },
-                { name: "Services", to: "/services" },
-                { name: "Contact Us", to: "/contact" },
-                { name: "Membership", to: "/membership" },
-                { name: "Join Us", to: "/join" },
-                { name: "Dashboard", to: "/dashboard" },
+                { name: "<Home", to: "/" },
+                { name: "<About Us", to: "/about" },
+                { name: "<Services", to: "/services" },
+                { name: "<Contact Us", to: "/contact" },
+                { name: "<Membership", to: "/membership" },
+               
               ].map((link) => (
                 <li key={link.to}>
                   <Link to={link.to} className="hover:text-primary transition">
@@ -42,11 +41,9 @@ const Footer = () => {
 
           {/* Social Icons */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Follow Us</h3>
+            <h3 className="text-lg font-semibold mb-4 text-blue-600">| Follow Us</h3>
             <div className="flex space-x-5 text-primary text-xl">
-              <a href="#" className="hover:text-yellow-500 transition" aria-label="Facebook">
-                <FaFacebookF />
-              </a>
+             
               <a href="#" className="hover:text-yellow-500 transition" aria-label="Twitter">
                 <FaTwitter />
               </a>
@@ -61,7 +58,7 @@ const Footer = () => {
 
           {/* Contact Info */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Contact</h3>
+            <h3 className="text-lg font-semibold mb-4 text-blue-600">| Contact</h3>
             <p className="text-sm">Email: support@speakstack.com</p>
             <p className="text-sm mt-2">Address: Dhaka, Bangladesh</p>
           </div>

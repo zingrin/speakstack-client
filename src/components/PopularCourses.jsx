@@ -22,7 +22,9 @@ const PopularCourses = () => {
             <img src={course.image} alt={course.title} className="h-48 w-full object-cover" />
             <div className="p-4">
               <h3 className="text-xl font-semibold">{course.title}</h3>
-              <p className="text-sm text-gray-600 mb-1">Instructor: {course.instructor}</p>
+              <p className="text-sm text-gray-600 mb-1">author: {course.author}</p>
+              <p className="text-sm text-gray-600 mb-1">authorEmail: {course.authorEmail}</p>
+              <p className="text-sm text-gray-600 mb-1">date: {course.date}</p>
               <div className="flex justify-between text-sm mt-2">
                 <span>⭐ {course.rating}</span>
                 <span>👥 {course.enrolled} Enrolled</span>

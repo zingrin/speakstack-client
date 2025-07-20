@@ -12,7 +12,7 @@ const NewCourses = ({ allCourses }) => {
   }, [allCourses]);
 
   const handleShowAll = () => {
-    setVisibleCourses(allCourses); // show all 8
+    setVisibleCourses(allCourses); 
     setShowAll(true);
   };
 

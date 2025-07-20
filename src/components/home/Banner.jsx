@@ -23,6 +23,8 @@ const Banner = ({ onSearch }) => {
     "https://i.ibb.co/h1725wM7/images-q-tbn-ANd9-Gc-Qv4r-Fi-Kxcc-GGl50ndhy-TSd-ZNYk5k-Ui4-T8-Or-D2-GY8nren-BY41-LLpk-GMn-Yc-Qh-H0-R.jpg",
   ];
 
+  const tags = ["React", "JavaScript", "MongoDB", "CSS", "NodeJS", "Tailwind"];
+
   return (
     <section className="relative text-white overflow-hidden">
       {/* Swiper Carousel */}
@@ -45,22 +47,22 @@ const Banner = ({ onSearch }) => {
       </Swiper>
 
       {/* Overlay Content */}
-      <div className="absolute inset-0  bg-opacity-50 flex flex-col justify-center items-center text-center space-y-5 px-4 z-10">
-        <h1 className="text-3xl md:text-5xl font-bold drop-shadow-lg">
+      <div className="absolute inset-0 bg-opacity-60 flex flex-col justify-center items-center text-center space-y-6 px-4 z-10">
+        <h1 className="text-4xl md:text-5xl font-bold drop-shadow-lg">
           Explore Conversations
         </h1>
-        <p className="text-base md:text-lg">
+        <p className="text-base md:text-lg text-gray-200">
           Search discussions by tags and topics
         </p>
 
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col sm:flex-row justify-center gap-4"
+          className="flex flex-col sm:flex-row justify-center gap-4 w-full max-w-lg"
         >
           <input
             type="text"
             placeholder="Search by tag..."
-            className="input input-bordered w-full max-w-xs text-black"
+            className="input input-bordered w-full text-black"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -70,12 +72,12 @@ const Banner = ({ onSearch }) => {
         </form>
 
         <div className="text-sm flex justify-center gap-3 flex-wrap">
-          {["React", "MERN", "Auth"].map((tag) => (
+          {tags.map((tag) => (
             <button
               key={tag}
               type="button"
-              className="badge badge-outline cursor-pointer"
-              onClick={() => onSearch(tag)}
+              className="badge badge-outline cursor-pointer hover:badge-secondary transition"
+              onClick={() => onSearch(tag.toLowerCase())}
             >
               #{tag}
             </button>

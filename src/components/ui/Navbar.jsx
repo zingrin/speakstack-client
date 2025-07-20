@@ -21,12 +21,12 @@ const Navbar = () => {
       </li>
       <li>
         <NavLink
-          to="/all-course"
+          to="/allPost"
           className={({ isActive }) =>
             isActive ? "font-semibold text-primary" : "hover:text-primary"
           }
         >
-          All Course
+          All Post
         </NavLink>
       </li>
       <li>

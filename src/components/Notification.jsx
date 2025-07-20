@@ -25,13 +25,13 @@ const axiosSecure = useAxiosSecure();
         setUnreadCount(unread);
       } catch (error) {
         console.error("Failed to fetch notifications", error);
-        setNotifications([]); // fallback
+        setNotifications([]); 
       }
     };
 
     fetchNotifications();
 
-    const interval = setInterval(fetchNotifications, 30000); // 30s auto-refresh
+    const interval = setInterval(fetchNotifications, 30000); 
     return () => clearInterval(interval);
   }, []);
 
@@ -51,7 +51,6 @@ const axiosSecure = useAxiosSecure();
   const toggleDropdown = () => {
     setShowList((prev) => !prev);
   };
-console.log(notifications);
   const markAsRead = async (id) => {
     try {
       await axiosSecure.post(`/notifications/${id}/read`);

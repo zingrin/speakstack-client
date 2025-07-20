@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router"; 
-import PostList from "./PostsList";
 import LoadingSpinner from "../ui/LoadingSpinner";
-
+import PostList from "./PostList";
 const PostPages = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
