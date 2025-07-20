@@ -1,24 +1,28 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router";
-import Swal from "sweetalert2";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import useAuth from "../../../hooks/useAuth";
+import Swal from "sweetalert2";
 
 const MyPosts = () => {
-  const [posts, setPosts] = useState([]);
-  const navigate = useNavigate();
   const axiosSecure = useAxiosSecure();
+  const { user } = useAuth();
+  const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    axiosSecure
-      .get("/posts")
-      .then((res) => {
-        console.log("API Response:", res.data);
-        setPosts(res.data.posts);
-      })
-      .catch((err) => console.error("Failed to fetch posts", err));
-  }, [axiosSecure]);
+    if (user?.email) {
+      axiosSecure
+        .get(`/posts?email=${user.email}`)
+        .then((res) => {
+          setPosts(Array.isArray(res.data) ? res.data : []);
+        })
+        .catch((err) => {
+          console.error("Failed to fetch posts", err);
+        });
+    }
+  }, [axiosSecure, user]);
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (postId) => {
     const result = await Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -31,61 +35,58 @@ const MyPosts = () => {
 
     if (result.isConfirmed) {
       try {
-        await axiosSecure.delete(`/posts/${id}`);
-        setPosts((prev) => prev.filter((post) => post._id !== id));
-        Swal.fire("Deleted!", "Your post has been deleted.", "success");
+        const res = await axiosSecure.delete(`/posts/${postId}`);
+        if (res.data.deletedCount > 0) {
+          setPosts((prev) => prev.filter((post) => post._id !== postId));
+          Swal.fire("Deleted!", "Your post has been deleted.", "success");
+        }
       } catch (err) {
-        console.error("Delete failed", err);
+        console.error("Failed to delete post", err);
         Swal.fire("Error", "Failed to delete the post.", "error");
       }
     }
   };
 
-  const handleViewComments = (id) => {
-    navigate(`/comments/${id}`);
-  };
-
   return (
-    <div className="max-w-5xl mx-auto p-6 bg-white rounded shadow-md">
-      <h2 className="text-2xl font-semibold mb-6">My Posts</h2>
+    <div className="overflow-x-auto p-4">
+      <h2 className="text-2xl font-bold mb-4">My Posts ({posts.length})</h2>
       {posts.length === 0 ? (
-        <p>No posts found.</p>
+        <p className="text-gray-500">You have not created any posts yet.</p>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="table w-full">
-            <thead>
-              <tr>
-                <th>Post Title</th>
-                <th>Votes</th>
-                <th>Comments</th>
-                <th>Actions</th>
+        <table className="table w-full border">
+          <thead className="bg-base-200 text-base font-semibold">
+            <tr>
+              <th>Title</th>
+              <th>Votes</th>
+              <th>Comments</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {posts.map((post) => (
+              <tr key={post._id}>
+                <td>{post.title}</td>
+                <td>{(post.upVote || 0) - (post.downVote || 0)}</td>
+                <td>
+                  <Link
+                    to={`/comments/${post._id}`}
+                    className="btn btn-xs btn-info text-white"
+                  >
+                    View Comments
+                  </Link>
+                </td>
+                <td>
+                  <button
+                    onClick={() => handleDelete(post._id)}
+                    className="btn btn-xs btn-error text-white"
+                  >
+                    Delete
+                  </button>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {posts.map(({ _id, title, upVote = 0, downVote = 0, commentsCount = 0 }) => (
-                <tr key={_id}>
-                  <td>{title}</td>
-                  <td>{upVote - downVote}</td>
-                  <td>{commentsCount}</td>
-                  <td className="space-x-2">
-                    <button
-                      onClick={() => handleViewComments(_id)}
-                      className="btn btn-sm btn-info"
-                    >
-                      Comments
-                    </button>
-                    <button
-                      onClick={() => handleDelete(_id)}
-                      className="btn btn-sm btn-error"
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+            ))}
+          </tbody>
+        </table>
       )}
     </div>
   );

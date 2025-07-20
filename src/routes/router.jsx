@@ -4,10 +4,8 @@ import MainLayout from "../layouts/MainLayout";
 import Home from "../pages/Home";
 import JoinUs from "../pages/JoinUs";
 import PrivateRoute from "../components/auth/PrivateRouter";
-import Membership from "../pages/Membership";
 import PostDetails from "../pages/PostDetails";
 import UserDashboardLayout from "../pages/dashboard/user/UserDashboardLayout";
-import Profile from "../pages/dashboard/user/Profile";
 import AddPost from "../pages/dashboard/user/AddPost";
 import MyPosts from "../pages/dashboard/user/MyPosts";
 import AdminDashboardLayout from "../pages/dashboard/admin/AdminDashboardLayout";
@@ -25,6 +23,8 @@ import AnnouncementsSection from "../components/ui/AnnouncementsSection";
 import Notification from "../components/Notification";
 import PostPages from "../components/posts/PostPages";
 import AllPosts from "../components/AllPost";
+import MyProfile from "../pages/dashboard/user/MyProfile";
+import MembershipPage from "../pages/MembershipPage";
 
 const router = createBrowserRouter([
   {
@@ -45,7 +45,7 @@ const router = createBrowserRouter([
         path: "/membership",
         element: (
           <PrivateRoute>
-            <Membership />
+            <MembershipPage />
           </PrivateRoute>
         ),
       },
@@ -76,7 +76,7 @@ const router = createBrowserRouter([
         path: "user",
         element: <UserDashboardLayout />,
         children: [
-          { path: "profile", element: <Profile /> },
+          { path: "profile", element: <MyProfile /> },
           { path: "add-post", element: <AddPost /> },
           { path: "my-posts", element: <MyPosts /> },
         ],

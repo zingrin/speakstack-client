@@ -1,76 +1,60 @@
-import { useEffect, useState } from "react";
-import useAuth from "../../../hooks/useAuth";
-import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import bronzeBadge from "../../../assets/bronzeBadge.jpg";
-import goldBadge from "../../../assets/goldBadge.jpg";
+import React, { useContext, useEffect, useState } from 'react';
+import { FaMedal } from 'react-icons/fa';
+import AuthContext from '../../../contexts/AuthContexts';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
 
 const MyProfile = () => {
-  const { user } = useAuth();
-  const [posts, setPosts] = useState([]);
-  const [isMember, setIsMember] = useState(false); // membership status
-  const [loading, setLoading] = useState(true);
-  const axiosSecure =useAxiosSecure();
+  const { user } = useContext(AuthContext);
+  const axiosSecure = useAxiosSecure();
+  const [userInfo, setUserInfo] = useState({});
+  const [recentPosts, setRecentPosts] = useState([]);
+
   useEffect(() => {
-    if (!user) return;
+    // Get user info
+    axiosSecure.get(`/users/${user?.email}`).then(res => {
+      setUserInfo(res.data);
+    });
 
-    const fetchData = async () => {
-      try {
-        // Check if user is a member
-        const memberRes = await axiosSecure.get(`/users/membership-status?email=${user.email}`);
-        setIsMember(memberRes.data.isMember);
+    // Get 3 recent posts
+    axiosSecure.get(`/posts?email=${user?.email}&limit=3&sort=desc`).then(res => {
+      setRecentPosts(res.data);
+    });
+  }, [axiosSecure, user]);
 
-        // Get recent 3 posts of the user
-        const postsRes = await axiosSecure.get(`/posts/recent?userEmail=${user.email}&limit=3`);
-        setPosts(postsRes.data.posts);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [user]);
-
-  if (loading) return <div>Loading...</div>;
+  const { name, email, image, membership } = userInfo;
 
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-white rounded shadow">
-      <div className="flex items-center gap-4 mb-6">
-        <img
-          src={user.photoURL || "https://via.placeholder.com/100"}
-          alt={user.displayName}
-          className="w-24 h-24 rounded-full"
-        />
-        <div>
-          <h1 className="text-3xl font-bold">{user.displayName}</h1>
-          <p className="text-gray-600">{user.email}</p>
-          <div className="flex gap-4 mt-2">
-            {/* Badges */}
-            <img src={bronzeBadge} alt="Bronze Badge" title="Bronze Badge - Registered User" className="w-8 h-8" />
-            {isMember && (
-              <img src={goldBadge} alt="Gold Badge" title="Gold Badge - Member" className="w-8 h-8" />
-            )}
-          </div>
+    <div className="max-w-3xl mx-auto p-4">
+      <div className="bg-white rounded-lg shadow p-6 text-center">
+        <img src={image} alt="User" className="w-24 h-24 rounded-full mx-auto" />
+        <h2 className="text-2xl font-bold mt-2">{name}</h2>
+        <p className="text-gray-600">{email}</p>
+
+        {/* BADGES */}
+        <div className="mt-4 flex justify-center gap-4">
+          {membership === 'gold' && (
+            <div className="badge badge-warning text-white">
+              <FaMedal className="mr-1" /> Gold Member
+            </div>
+          )}
+          {membership === 'bronze' && (
+            <div className="badge badge-accent text-white">
+              <FaMedal className="mr-1" /> Bronze Member
+            </div>
+          )}
         </div>
       </div>
 
-      <h2 className="text-xl font-semibold mb-4">My Recent Posts</h2>
-      <ul className="space-y-4">
-        {posts.length === 0 ? (
-          <p>No posts yet.</p>
-        ) : (
-          posts.map((post) => (
-            <li key={post._id} className="p-4 border rounded">
-              <h3 className="text-lg font-bold">{post.title}</h3>
-              <p className="text-gray-700">{post.content.slice(0, 100)}...</p>
-              <p className="text-sm text-gray-500 mt-1">
-                Created on: {new Date(post.createdAt).toLocaleDateString()}
-              </p>
-            </li>
-          ))
-        )}
-      </ul>
+      {/* RECENT POSTS */}
+      <div className="mt-8">
+        <h3 className="text-xl font-semibold mb-4">My Recent Posts</h3>
+        {recentPosts.map(post => (
+          <div key={post._id} className="bg-gray-100 p-4 rounded-lg mb-3">
+            <h4 className="text-lg font-semibold">{post.title}</h4>
+            <p className="text-sm text-gray-600">{post.description?.slice(0, 100)}...</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
