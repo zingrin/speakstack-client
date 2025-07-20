@@ -20,7 +20,7 @@ const PostCard = ({ post }) => {
     month: "short",
     year: "numeric",
   });
-
+console.log(author);
   return (
     <div className="card bg-base-100 shadow-md hover:shadow-lg transition-all duration-200">
       <div className="card-body">
@@ -32,7 +32,7 @@ const PostCard = ({ post }) => {
             className="w-9 h-9 rounded-full object-cover border"
           />
           <div>
-            <p className="font-semibold text-sm">{author}</p>
+            {/* <p className="font-semibold text-sm">{author}</p> */}
             <p className="text-xs text-gray-500">{formattedDate}</p>
           </div>
         </div>

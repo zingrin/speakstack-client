@@ -10,17 +10,19 @@ const PostDetails = () => {
   const navigate = useNavigate();
   const [post, setPost] = useState(null);
 
+  // Fetch post details
   useEffect(() => {
     fetch(`http://localhost:5000/posts/${id}`)
       .then((res) => res.json())
       .then((data) => setPost(data));
   }, [id]);
 
+  // Vote handler (type: 'upVote' or 'downVote')
   const handleVote = (type) => {
     fetch(`http://localhost:5000/posts/vote/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ type }), // 'upVote' or 'downVote'
+      body: JSON.stringify({ type }), // type = 'upVote' or 'downVote'
     })
       .then((res) => res.json())
       .then((data) => setPost(data));
@@ -32,7 +34,7 @@ const PostDetails = () => {
 
   return (
     <div className="max-w-3xl mx-auto p-4 space-y-6">
-      {/* Back button */}
+      {/* Back Button */}
       <button
         onClick={() => navigate(-1)}
         className="flex items-center gap-2 text-blue-600 hover:underline"
@@ -40,36 +42,58 @@ const PostDetails = () => {
         <IoArrowBackSharp /> Back
       </button>
 
+      {/* Post Content */}
       <div className="bg-white p-6 rounded-xl shadow">
+        {/* Author */}
         <div className="flex items-center gap-4 mb-4">
-          <img src={post.authorImage} alt={post.author} className="w-12 h-12 rounded-full" />
+          <img
+            src={post.authorImage}
+            alt={post.author}
+            className="w-12 h-12 rounded-full"
+          />
           <div>
             <h3 className="font-bold">{post.author}</h3>
-            <p className="text-sm text-gray-500">{new Date(post.createdAt).toLocaleString()}</p>
+            <p className="text-sm text-gray-500">
+              {new Date(post.createdAt).toLocaleString()}
+            </p>
           </div>
         </div>
 
-        <img src={post.image} alt={post.title} className="w-full h-60 object-cover rounded-md mb-4" />
+        {/* Image */}
+        <img
+          src={post.image}
+          alt={post.title}
+          className="w-full h-60 object-cover rounded-md mb-4"
+        />
+
+        {/* Title & Content */}
         <h2 className="text-2xl font-bold">{post.title}</h2>
         <p className="text-gray-700">{post.content}</p>
 
+        {/* Tags
         <div className="flex gap-2 mt-4 flex-wrap">
           {post.tags.map((tag, idx) => (
-            <span key={idx} className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">#{tag}</span>
+            <span
+              key={idx}
+              className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm"
+            >
+              #{tag}
+            </span>
           ))}
-        </div>
+        </div> */}
 
-        <div className="mt-6 flex items-center gap-6">
+        {/* Vote & Share */}
+        <div className="mt-6 flex items-center gap-6 flex-wrap">
           <button
-            className="flex items-center gap-2 text-green-600"
             onClick={() => handleVote("upVote")}
+            className="flex items-center gap-2 text-green-600 hover:underline"
           >
             <FaThumbsUp /> {post.upVote}
           </button>
 
           <button
-            className="flex items-center gap-2 text-red-600"
             onClick={() => handleVote("downVote")}
+            className="flex items-center gap-2 text-red-600 hover:underline"
           >
             <FaThumbsDown /> {post.downVote}
           </button>
@@ -80,9 +104,10 @@ const PostDetails = () => {
         </div>
       </div>
 
+      {/* Comments Section */}
       <Comments postId={post._id} />
     </div>
   );
 };
 
-export default PostDetails;
+export default PostDetails;  

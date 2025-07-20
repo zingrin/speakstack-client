@@ -1,73 +1,141 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router";
+import Select from "react-select";
+
 import Swal from "sweetalert2";
-import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useAuth from "../../../hooks/useAuth";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+
+const TAG_OPTIONS = [
+  { value: "React", label: "React" },
+  { value: "JavaScript", label: "JavaScript" },
+  { value: "CSS", label: "CSS" },
+  { value: "Node.js", label: "Node.js" },
+  { value: "MongoDB", label: "MongoDB" },
+];
 
 const AddPost = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const axiosSecure = useAxiosSecure();
   const [postCount, setPostCount] = useState(0);
-  const [isMember, setIsMember] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
+    authorImage: "",
+    authorName: "",
+    authorEmail: "",
     title: "",
-    description: "",
-    tag: "",
+    content: "",
+    tags: [],
+    upVote: 0,
+    downVote: 0,
   });
 
-  const axiosSecure = useAxiosSecure();
-  const { user } = useAuth(); // user.email এর জন্য
-
   useEffect(() => {
-    // POST count and membership status আনো
-    axiosSecure.get(`/user/post-info?email=${user?.email}`).then((res) => {
-      setPostCount(res.data.count);
-      setIsMember(res.data.isMember);
-    });
-  }, [user?.email, axiosSecure]);
+    if (!user) return;
 
-  const handleChange = (e) => {
+    const getPostCount = async () => {
+      try {
+        const response = await axiosSecure.get(
+          `/posts/count?userEmail=${user.email}`
+        );
+        setPostCount(response.data.count || 0);
+      } catch (error) {
+        setPostCount(0);
+        Swal.fire({
+          icon: "error",
+          title: "Error Loading Posts Count",
+          text: "Could not load your posts count. Please try again later.",
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getPostCount();
+
     setFormData((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      authorName: user.displayName || "",
+      authorEmail: user.email,
+      authorImage: user.photoURL || "",
+    }));
+  }, [user]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleTagChange = (selectedOptions) => {
+    setFormData((prev) => ({
+      ...prev,
+      tags: selectedOptions ? selectedOptions.map((opt) => opt.value) : [],
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const postData = {
+    if (
+      !formData.title.trim() ||
+      !formData.content.trim() ||
+      formData.tags.length === 0
+    ) {
+      Swal.fire({
+        icon: "warning",
+        title: "Missing fields",
+        text: "Please fill in title, content, and select at least one tag.",
+      });
+      return;
+    }
+
+    const newPost = {
+      authorImage: formData.authorImage,
+      authorName: formData.authorName,
+      authorEmail: formData.authorEmail,
       title: formData.title,
-      content: formData.description,
-      tags: [formData.tag],
-      author: {
-        name: user?.displayName || "Anonymous",
-        image: user?.photoURL || "",
-        email: user?.email,
-      },
-      time: new Date(),
+      content: formData.content,
+      tags: formData.tags,
       upVote: 0,
       downVote: 0,
+      createdAt: new Date().toISOString(),
+      upVoters: [],
+      downVoters: [],
+      commentsCount: 0,
+      image: "", // Optional image URL
     };
 
     try {
-      const res = await axiosSecure.post("/posts", postData);
-      if (res.data.insertedId) {
-        Swal.fire("Success!", "Post submitted successfully!", "success");
-        setFormData({ title: "", description: "", tag: "" });
-      }
-    } catch (err) {
-      Swal.fire("Error", "Failed to submit post", "error");
+      await axiosSecure.post("/posts", newPost);
+      Swal.fire({
+        icon: "success",
+        title: "Post Created",
+        text: "Your post has been added successfully.",
+        timer: 1500,
+        showConfirmButton: false,
+      });
+      navigate("/");
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Could not create post, please try again.",
+      });
     }
   };
 
-  if (!isMember && postCount >= 5) {
+  if (loading) return <div className="text-center mt-10">Loading...</div>;
+
+  if (postCount >= 5) {
     return (
-      <div className="max-w-xl mx-auto p-6 bg-white rounded shadow-md text-center">
-        <h2 className="text-2xl font-semibold mb-4">Post Limit Reached</h2>
-        <p className="mb-6">
-          You have reached your 5 post limit. Become a member to add more posts.
+      <div className="max-w-xl mx-auto mt-20 text-center">
+        <p className="mb-4 text-lg font-semibold">
+          You have reached the free post limit (5 posts).
         </p>
         <button
-          onClick={() => (window.location.href = "/membership")}
           className="btn btn-primary"
+          onClick={() => navigate("/membership")}
         >
           Become a Member
         </button>
@@ -76,54 +144,95 @@ const AddPost = () => {
   }
 
   return (
-    <div className="max-w-xl mx-auto p-6 bg-white rounded shadow-md">
-      <h2 className="text-2xl font-semibold mb-6">Add a New Post</h2>
+    <div className="max-w-xl mx-auto mt-10 p-6 bg-white rounded shadow">
+      <h2 className="text-2xl font-bold mb-6 text-center">Add New Post</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Author Image */}
         <div>
-          <label className="block mb-1 font-medium">Post Title</label>
+          <label className="block font-semibold mb-1">Author Image URL</label>
+          <input
+            type="text"
+            name="authorImage"
+            value={formData.authorImage}
+            onChange={handleChange}
+            className="input input-bordered w-full"
+            placeholder="https://example.com/photo.jpg"
+            required
+          />
+        </div>
+
+        {/* Author Name */}
+        <div>
+          <label className="block font-semibold mb-1">Author Name</label>
+          <input
+            type="text"
+            name="authorName"
+            value={formData.authorName}
+            onChange={handleChange}
+            className="input input-bordered w-full"
+            required
+          />
+        </div>
+
+        {/* Author Email */}
+        <div>
+          <label className="block font-semibold mb-1">Author Email</label>
+          <input
+            type="email"
+            name="authorEmail"
+            value={formData.authorEmail}
+            onChange={handleChange}
+            className="input input-bordered w-full"
+            required
+            readOnly
+          />
+        </div>
+
+        {/* Post Title */}
+        <div>
+          <label className="block font-semibold mb-1">Post Title</label>
           <input
             type="text"
             name="title"
             value={formData.title}
             onChange={handleChange}
-            required
             className="input input-bordered w-full"
             placeholder="Enter post title"
+            required
           />
         </div>
 
+        {/* Post Description */}
         <div>
-          <label className="block mb-1 font-medium">Post Description</label>
+          <label className="block font-semibold mb-1">Post Description</label>
           <textarea
-            name="description"
-            value={formData.description}
+            name="content"
+            value={formData.content}
             onChange={handleChange}
-            required
             className="textarea textarea-bordered w-full"
-            placeholder="Write your post description"
-            rows={4}
+            rows="4"
+            placeholder="Write your post content"
+            required
+          ></textarea>
+        </div>
+
+        {/* Tags */}
+        <div>
+          <label className="block font-semibold mb-1">Tags</label>
+          <Select
+            options={TAG_OPTIONS}
+            isMulti
+            value={TAG_OPTIONS.filter((tag) =>
+              formData.tags.includes(tag.value)
+            )}
+            onChange={handleTagChange}
+            placeholder="Select tags"
           />
         </div>
 
-        <div>
-          <label className="block mb-1 font-medium">Tag</label>
-          <select
-            name="tag"
-            value={formData.tag}
-            onChange={handleChange}
-            required
-            className="select select-bordered w-full"
-          >
-            <option value="">Select a tag</option>
-            <option value="react">React</option>
-            <option value="firebase">Firebase</option>
-            <option value="auth">Auth</option>
-            <option value="mongodb">MongoDB</option>
-          </select>
-        </div>
-
-        <button type="submit" className="btn btn-primary w-full">
-          Submit Post
+        {/* Submit */}
+        <button type="submit" className="btn btn-primary w-full mt-4">
+          Add Post
         </button>
       </form>
     </div>
