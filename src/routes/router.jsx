@@ -9,7 +9,6 @@ import UserDashboardLayout from "../pages/dashboard/user/UserDashboardLayout";
 import AddPost from "../pages/dashboard/user/AddPost";
 import MyPosts from "../pages/dashboard/user/MyPosts";
 import AdminDashboardLayout from "../pages/dashboard/admin/AdminDashboardLayout";
-import Users from "../pages/dashboard/admin/Users";
 import Reports from "../pages/dashboard/admin/Reports";
 import Announcement from "../pages/dashboard/admin/Announcement";
 import DashboardLayout from "../layouts/DashboardLayout";
@@ -85,7 +84,7 @@ const router = createBrowserRouter([
         path: "admin",
         element: <AdminDashboardLayout />,
         children: [
-          { path: "users", element: <Users /> },
+          // { path: "users", element: <Users /> },
           { path: "reports", element: <Reports /> },
           { path: "announcement", element: <Announcement /> },
         ],

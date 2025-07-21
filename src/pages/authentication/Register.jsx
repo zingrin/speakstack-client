@@ -2,21 +2,38 @@ import { useForm } from "react-hook-form";
 import { useContext, useState } from "react";
 import SocialLogin from "./SocialLogin";
 import AuthContext from "../../contexts/AuthContexts";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const Register = () => {
   const { registerWithEmail } = useContext(AuthContext);
   const [error, setError] = useState("");
   const { register, handleSubmit } = useForm();
-
+  const navigate = useNavigate();
+const axiosSecure = useAxiosSecure();
   const onSubmit = async (data) => {
     setError("");
+
     if (data.password !== data.confirmPassword) {
       setError("Passwords do not match");
       return;
     }
+
     try {
-      await registerWithEmail(data.email, data.password, data.name);
+      const result = await registerWithEmail(data.email, data.password, data.name);
+
+      const savedUser = {
+        name: data.name,
+        email: data.email,
+        photo: result?.user?.photoURL || "", 
+        membership:"bronze",
+        role: "user", 
+        createdAt: new Date().toISOString()
+      };
+
+      await axiosSecure.post("/users", savedUser);
+
+      navigate("/"); 
     } catch (err) {
       setError(err.message || "Failed to register");
     }
@@ -27,7 +44,6 @@ const Register = () => {
       <h2 className="text-2xl font-semibold mb-4 text-center">Register</h2>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        {/* Name */}
         <div>
           <input
             {...register("name", { required: "Name required" })}
@@ -38,7 +54,6 @@ const Register = () => {
           <label className="block text-sm mt-1 text-gray-600">Name</label>
         </div>
 
-        {/* Email */}
         <div>
           <input
             {...register("email", { required: "Email required" })}
@@ -49,7 +64,6 @@ const Register = () => {
           <label className="block text-sm mt-1 text-gray-600">Email</label>
         </div>
 
-        {/* Password */}
         <div>
           <input
             {...register("password", { required: "Password required" })}
@@ -60,7 +74,6 @@ const Register = () => {
           <label className="block text-sm mt-1 text-gray-600">Password</label>
         </div>
 
-        {/* Confirm Password */}
         <div>
           <input
             {...register("confirmPassword", { required: "Confirm password required" })}
@@ -82,7 +95,6 @@ const Register = () => {
 
       <SocialLogin />
 
-      {/* Login link */}
       <p className="mt-6 text-center text-sm text-gray-700">
         Already have an account?{" "}
         <Link to="/login" className="text-primary font-semibold hover:underline">

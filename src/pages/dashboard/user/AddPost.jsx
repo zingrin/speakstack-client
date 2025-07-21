@@ -22,7 +22,7 @@ const AddPost = () => {
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
     authorImage: "",
-    authorName: "",
+    author: "",
     authorEmail: "",
     title: "",
     content: "",
@@ -56,7 +56,7 @@ const AddPost = () => {
 
     setFormData((prev) => ({
       ...prev,
-      authorName: user.displayName || "",
+      author: user.displayName || "",
       authorEmail: user.email,
       authorImage: user.photoURL || "",
     }));
@@ -92,7 +92,7 @@ const AddPost = () => {
 
     const newPost = {
       authorImage: formData.authorImage,
-      authorName: formData.authorName,
+      author: formData.author,
       authorEmail: formData.authorEmail,
       title: formData.title,
       content: formData.content,
@@ -166,8 +166,8 @@ const AddPost = () => {
           <label className="block font-semibold mb-1">Author Name</label>
           <input
             type="text"
-            name="authorName"
-            value={formData.authorName}
+            name="author"
+            value={formData.author}
             onChange={handleChange}
             className="input input-bordered w-full"
             required
