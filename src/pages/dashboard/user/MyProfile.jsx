@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { FaCrown } from "react-icons/fa";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import { FaCrown } from "react-icons/fa";
 
 const MyProfile = () => {
   const { user, loading } = useAuth();
@@ -28,7 +28,7 @@ const MyProfile = () => {
   return (
     <div className="max-w-md mx-auto mt-10 bg-white shadow-xl rounded-xl p-6 text-center">
       <img
-        src={userInfo.image || "https://i.ibb.co/yV6h2Rp/user.png"}
+        src={userInfo.image || "https://i.ibb.co/M5Sny2F9/306bb1a7-088d-49c1-ba91-c5033459d1c2.jpg"}
         alt="Profile"
         className="w-24 h-24 rounded-full mx-auto border-4 border-primary mb-4"
       />

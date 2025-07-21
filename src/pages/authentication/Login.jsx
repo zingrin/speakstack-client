@@ -55,7 +55,7 @@ const Login = () => {
 
       <div className="divider">OR</div>
 
-      <SocialLogin />
+<SocialLogin from={location.state?.from?.pathname || "/"} />
 
       {/* Register link */}
       <p className="mt-6 text-center text-sm text-gray-700">

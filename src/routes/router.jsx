@@ -24,6 +24,8 @@ import PostPages from "../components/posts/PostPages";
 import AllPosts from "../components/AllPost";
 import MyProfile from "../pages/dashboard/user/MyProfile";
 import MembershipPage from "../pages/MembershipPage";
+import Users from "../pages/dashboard/admin/Users";
+import AdminProfile from "../pages/dashboard/admin/AdminProfile";
 
 const router = createBrowserRouter([
   {
@@ -84,7 +86,8 @@ const router = createBrowserRouter([
         path: "admin",
         element: <AdminDashboardLayout />,
         children: [
-          // { path: "users", element: <Users /> },
+          {path:"admin-profile",element: <AdminProfile></AdminProfile>},
+          { path: "users", element: <Users /> },
           { path: "reports", element: <Reports /> },
           { path: "announcement", element: <Announcement /> },
         ],
