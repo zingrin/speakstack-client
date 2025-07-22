@@ -1,35 +1,22 @@
-import React, { useContext } from 'react';
-import Swal from 'sweetalert2';
-import useAxiosSecure from '../hooks/useAxiosSecure';
-import AuthContext from '../contexts/AuthContexts';
+import React from "react";
+import SubscribeForm from "../components/SubscribeForm";
+import { Elements } from "@stripe/react-stripe-js";
+import { stripePromise } from "../stripe";
 
 const MembershipPage = () => {
-  const { user } = useContext(AuthContext);
-  const [axiosSecure] = useAxiosSecure();
-
-  const handlePayment = async () => {
-    try {
-      // Fake payment success
-      const res = await axiosSecure.patch(`/users/membership/${user?.email}`, {
-        membership: 'gold',
-      });
-
-      if (res.data.modifiedCount > 0) {
-        Swal.fire('Success!', 'You are now a Gold Member!', 'success');
-      }
-    } catch (error) {
-      console.error(error);
-      Swal.fire('Error!', 'Payment failed.', 'error');
-    }
-  };
-
   return (
-    <div className="max-w-xl mx-auto text-center p-10">
-      <h2 className="text-2xl font-bold mb-4">Become a Gold Member</h2>
-      <p className="mb-6">Pay ৳500 to unlock unlimited posts and Gold badge!</p>
-      <button onClick={handlePayment} className="btn btn-warning text-white px-6">
-        Pay ৳500
-      </button>
+    <div className="min-h-screen flex flex-col items-center justify-center p-4">
+      <h2 className="text-3xl font-bold text-center text-primary mb-4">
+        Become a Gold Member 🏅
+      </h2>
+      <p className="text-center text-gray-600 mb-6">
+        Get unlimited post access and a Gold badge by paying only ৳999
+      </p>
+      <div className="w-full max-w-md bg-white shadow-md rounded-lg p-6">
+        <Elements stripe={stripePromise}>
+          <SubscribeForm />
+        </Elements>
+      </div>
     </div>
   );
 };

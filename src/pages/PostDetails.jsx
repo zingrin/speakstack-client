@@ -1,14 +1,17 @@
 import { useParams, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import { FacebookShareButton, FacebookIcon } from "react-share";
-import { FaThumbsUp, FaThumbsDown } from "react-icons/fa";
+import { FaThumbsUp, FaThumbsDown, FaFlag } from "react-icons/fa";
 import { IoArrowBackSharp } from "react-icons/io5";
 import Comments from "../components/comments/Comments";
+import Swal from "sweetalert2";
+import useAuth from "../hooks/useAuth";
 
 const PostDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [post, setPost] = useState(null);
+  const { user } = useAuth();
 
   // Fetch post details
   useEffect(() => {
@@ -17,15 +20,51 @@ const PostDetails = () => {
       .then((data) => setPost(data));
   }, [id]);
 
-  // Vote handler (type: 'upVote' or 'downVote')
+  // Vote handler
   const handleVote = (type) => {
     fetch(`http://localhost:5000/posts/vote/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ type }), // type = 'upVote' or 'downVote'
+      body: JSON.stringify({ type }),
     })
       .then((res) => res.json())
       .then((data) => setPost(data));
+  };
+
+  // Report handler
+  const handleReport = async () => {
+    const { value: reason } = await Swal.fire({
+      title: "Report this post",
+      input: "textarea",
+      inputLabel: "Reason for report",
+      inputPlaceholder: "Type your reason here...",
+      inputAttributes: { "aria-label": "Reason" },
+      showCancelButton: true,
+    });
+
+    if (reason) {
+      const reportData = {
+        postId: post._id,
+        postTitle: post.title,
+        reporterEmail: user?.email,
+        reason,
+        reportedAt: new Date(),
+      };
+
+      fetch("http://localhost:5000/api/reports", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(reportData),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.insertedId) {
+            Swal.fire("Reported!", "Thanks for your feedback.", "success");
+          } else {
+            Swal.fire("Error", "Something went wrong", "error");
+          }
+        });
+    }
   };
 
   if (!post) return <div className="text-center mt-10">Loading...</div>;
@@ -70,19 +109,7 @@ const PostDetails = () => {
         <h2 className="text-2xl font-bold">{post.title}</h2>
         <p className="text-gray-700">{post.content}</p>
 
-        {/* Tags
-        <div className="flex gap-2 mt-4 flex-wrap">
-          {post.tags.map((tag, idx) => (
-            <span
-              key={idx}
-              className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm"
-            >
-              #{tag}
-            </span>
-          ))}
-        </div> */}
-
-        {/* Vote & Share */}
+        {/* Vote, Share, Report */}
         <div className="mt-6 flex items-center gap-6 flex-wrap">
           <button
             onClick={() => handleVote("upVote")}
@@ -101,6 +128,15 @@ const PostDetails = () => {
           <FacebookShareButton url={shareUrl} quote={post.title}>
             <FacebookIcon size={32} round />
           </FacebookShareButton>
+
+          {/* Report */}
+          <button
+            onClick={handleReport}
+            className="flex items-center gap-2 text-red-500 hover:underline"
+            title="Report Post"
+          >
+            <FaFlag /> Report
+          </button>
         </div>
       </div>
 
@@ -110,4 +146,4 @@ const PostDetails = () => {
   );
 };
 
-export default PostDetails;  
+export default PostDetails;

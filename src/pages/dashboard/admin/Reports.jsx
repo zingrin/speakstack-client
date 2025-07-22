@@ -4,10 +4,10 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const Reports = () => {
   const [reports, setReports] = useState([]);
-  const [selectedComment, setSelectedComment] = useState(null); 
+  const [selectedComment, setSelectedComment] = useState(null);
+  const [loading, setLoading] = useState(true);
   const axiosSecure = useAxiosSecure();
 
-  // Fetch all reports
   useEffect(() => {
     const fetchReports = async () => {
       try {
@@ -15,13 +15,14 @@ const Reports = () => {
         setReports(res.data);
       } catch (error) {
         console.error("Failed to fetch reports:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchReports();
   }, [axiosSecure]);
 
-  // Handle mark as resolved
   const handleResolve = async (id) => {
     const confirm = await Swal.fire({
       title: "Resolve Report?",
@@ -52,6 +53,9 @@ const Reports = () => {
     }
   };
 
+  if (loading)
+    return <div className="text-center my-10">Loading reports...</div>;
+
   return (
     <div className="max-w-6xl mx-auto bg-white dark:bg-base-100 rounded shadow-md p-6">
       <h3 className="text-2xl font-bold mb-4">🚩 Reported Comments</h3>
@@ -68,17 +72,21 @@ const Reports = () => {
                 <th>Comment</th>
                 <th>Reporter Email</th>
                 <th>Feedback</th>
+
                 <th>Status</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
               {reports.map((report, index) => (
-                <tr key={report._id} className={report.resolved ? "bg-green-50" : ""}>
+                <tr
+                  key={report._id}
+                  className={report.resolved ? "bg-green-50" : ""}
+                >
                   <td>{index + 1}</td>
-                  <td>{report.postTitle}</td>
+                  <td>{report.postTitle || "N/A"}</td>
                   <td>
-                    {report.comment.length > 20 ? (
+                    {report.comment?.length > 20 ? (
                       <>
                         {report.comment.slice(0, 20)}...
                         <button
@@ -89,11 +97,12 @@ const Reports = () => {
                         </button>
                       </>
                     ) : (
-                      report.comment
+                      report.comment || "No comment"
                     )}
                   </td>
                   <td>{report.reporterEmail}</td>
                   <td>{report.feedback}</td>
+
                   <td className="font-semibold">
                     {report.resolved ? (
                       <span className="text-green-600">Resolved</span>
@@ -110,7 +119,9 @@ const Reports = () => {
                         Mark Resolved
                       </button>
                     ) : (
-                      <span className="text-green-600 font-semibold">✔ Done</span>
+                      <span className="text-green-600 font-semibold">
+                        ✔ Done
+                      </span>
                     )}
                   </td>
                 </tr>
@@ -122,10 +133,18 @@ const Reports = () => {
 
       {/* Read More Modal */}
       {selectedComment && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-          <div className="bg-white dark:bg-gray-800 rounded p-6 w-full max-w-md shadow-lg">
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+          onClick={() => setSelectedComment(null)}
+        >
+          <div
+            className="bg-white dark:bg-gray-800 rounded p-6 w-full max-w-md shadow-lg"
+            onClick={(e) => e.stopPropagation()}
+          >
             <h4 className="text-lg font-bold mb-2">Full Comment</h4>
-            <p className="text-gray-800 dark:text-gray-100">{selectedComment}</p>
+            <p className="text-gray-800 dark:text-gray-100">
+              {selectedComment}
+            </p>
             <div className="mt-4 text-right">
               <button
                 onClick={() => setSelectedComment(null)}

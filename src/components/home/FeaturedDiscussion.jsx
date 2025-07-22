@@ -16,12 +16,9 @@ const FeaturedDiscussion = () => {
           </span>
           and let your voice be heard in the community.
         </p>
-        <Link
-          to="/posts/:id"
-          className="btn bg-yellow-400 hover:bg-yellow-500 text-black px-8 py-3 rounded-full text-lg shadow-md transition"
-        >
-          Read & Comment
-        </Link>
+          <button className="btn bg-yellow-400 hover:bg-yellow-500 text-black px-8 py-3 rounded-full text-lg shadow-md transition">
+        
+          Read & Comment</button>
       </div>
     </section>
   );
