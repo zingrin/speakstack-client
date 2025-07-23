@@ -35,7 +35,7 @@ const Announcement = () => {
         timer: 2000,
         showConfirmButton: false,
       }).then(() => {
-        navigate("/announcements"); // ✅ Redirect to announcements section
+        navigate("/announcements");
       });
 
       setFormData({

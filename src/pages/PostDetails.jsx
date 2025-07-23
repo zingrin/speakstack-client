@@ -47,7 +47,8 @@ const PostDetails = () => {
         postId: post._id,
         postTitle: post.title,
         reporterEmail: user?.email,
-        reason,
+        comment: "", 
+        feedback: reason,
         reportedAt: new Date(),
       };
 
@@ -141,7 +142,8 @@ const PostDetails = () => {
       </div>
 
       {/* Comments Section */}
-      <Comments postId={post._id} />
+      <Comments postId={post._id} postTitle={post.title} />
+
     </div>
   );
 };

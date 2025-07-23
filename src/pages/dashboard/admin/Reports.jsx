@@ -86,20 +86,23 @@ const Reports = () => {
                   <td>{index + 1}</td>
                   <td>{report.postTitle || "N/A"}</td>
                   <td>
-                    {report.comment?.length > 20 ? (
+                    {report.comment?.text?.length > 20 ? (
                       <>
-                        {report.comment.slice(0, 20)}...
+                        {report.comment.text.slice(0, 20)}...
                         <button
                           className="text-blue-600 ml-1 underline"
-                          onClick={() => setSelectedComment(report.comment)}
+                          onClick={() =>
+                            setSelectedComment(report.comment.text)
+                          }
                         >
                           Read More
                         </button>
                       </>
                     ) : (
-                      report.comment || "No comment"
+                      report.comment?.text || "No comment"
                     )}
                   </td>
+
                   <td>{report.reporterEmail}</td>
                   <td>{report.feedback}</td>
 

@@ -3,7 +3,6 @@ import React from "react";
 const AnnouncementCard = ({ announcement }) => {
   const { authorName, authorImage, title, description, date } = announcement;
 
-  // date কে সুন্দর readable format এ convert করবো
   const formattedDate = new Date(date).toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",

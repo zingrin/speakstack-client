@@ -28,7 +28,7 @@ const AnnouncementsSection = () => {
 
   useEffect(() => {
     fetchAnnouncements();
-  }, [axiosSecure]);
+  },[]);
 
   if (loading) {
     return (

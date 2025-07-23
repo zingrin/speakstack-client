@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router";
+import { Link } from "react-router"; 
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useAuth from "../../../hooks/useAuth";
 import Swal from "sweetalert2";
@@ -35,7 +35,7 @@ const MyPosts = () => {
 
     if (result.isConfirmed) {
       try {
-        const res = await axiosSecure.delete(`/posts/${postId}`);
+        const res = await axiosSecure.delete(`/comments/${postId}`);
         if (res.data.deletedCount > 0) {
           setPosts((prev) => prev.filter((post) => post._id !== postId));
           Swal.fire("Deleted!", "Your post has been deleted.", "success");
@@ -58,6 +58,7 @@ const MyPosts = () => {
             <tr>
               <th>Title</th>
               <th>Votes</th>
+              <th>Unvotes</th> 
               <th>Comments</th>
               <th>Actions</th>
             </tr>
@@ -66,7 +67,8 @@ const MyPosts = () => {
             {posts.map((post) => (
               <tr key={post._id}>
                 <td>{post.title}</td>
-                <td>{(post.upVote || 0) - (post.downVote || 0)}</td>
+                <td>{post.upVote || 0}</td>
+                <td>{post.downVote || 0}</td> 
                 <td>
                   <Link
                     to={`/comments/${post._id}`}

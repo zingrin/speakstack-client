@@ -17,7 +17,6 @@ const SubscribeForm = ({ price = 999 }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // if (!stripe || !elements || !clientSecret) return;
 
     const card = elements.getElement(CardElement);
     if (!card) return;

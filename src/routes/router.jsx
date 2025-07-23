@@ -26,6 +26,7 @@ import MyProfile from "../pages/dashboard/user/MyProfile";
 import MembershipPage from "../pages/MembershipPage";
 import Users from "../pages/dashboard/admin/Users";
 import AdminProfile from "../pages/dashboard/admin/AdminProfile";
+import CommentList from "../pages/CommentList";
 
 const router = createBrowserRouter([
   {
@@ -63,7 +64,7 @@ const router = createBrowserRouter([
         path: "/comments/:postId",
         element: (
           <PrivateRoute>
-            <CommentsPage />
+            <CommentList />
           </PrivateRoute>
         ),
       },

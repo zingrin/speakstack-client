@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import Banner from "../components/home/Banner";
 import TagFilter from "../components/TagFilter";
 import Pagination from "../components/home/Pagination";
-import AnnouncementList from "../components/home/AnnouncementList";
 import WhyChooseUs from "../components/WhyChooseUs";
 import PostCard from "../components/PostCard";
 import FeaturedDiscussion from "../components/home/FeaturedDiscussion";
 import TrendingCourses from "./TrendngCourses";
+import AnnouncementsSection from "../components/ui/AnnouncementsSection";
 
 const POSTS_PER_PAGE = 5;
 
@@ -65,11 +65,9 @@ const Home = () => {
       {totalPages > 1 && (
         <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
       )}
+      <AnnouncementsSection></AnnouncementsSection>
       <FeaturedDiscussion></FeaturedDiscussion>
       <TrendingCourses></TrendingCourses>
-      {/* <PopularCourses />
-      <NewCourses allCourses={allCourses} /> */}
-      <AnnouncementList announcements={[]} />
       <WhyChooseUs />
     </>
   );
