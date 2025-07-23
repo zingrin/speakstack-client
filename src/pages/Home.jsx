@@ -16,7 +16,7 @@ const Home = () => {
   const [page, setPage] = useState(1);
 
   useEffect(() => {
-    fetch("http://localhost:5000/posts")
+    fetch("https://speak-stack-server.vercel.app/posts")
       .then((res) => res.json())
       .then((data) => {
         setPosts(data);
@@ -25,7 +25,7 @@ const Home = () => {
   }, []);
 
   const handleTagSearch = (tag = "", sortBy = "newest") => {
-    let url = "http://localhost:5000/posts";
+    let url = "https://speak-stack-server.vercel.app/posts";
 
     if (tag) url += `/tag/${tag}`;
     url += `?sort=${sortBy}`;

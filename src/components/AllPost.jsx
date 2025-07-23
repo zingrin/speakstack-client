@@ -5,7 +5,7 @@ const AllPosts = () => {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/posts") // API endpoint
+    fetch("https://speak-stack-server.vercel.app/posts") 
       .then((res) => res.json())
       .then((data) => setPosts(data))
       .catch((err) => console.error("Failed to load posts", err));

@@ -15,14 +15,14 @@ const PostDetails = () => {
 
   // Fetch post details
   useEffect(() => {
-    fetch(`http://localhost:5000/posts/${id}`)
+    fetch(`https://speak-stack-server.vercel.app/posts/${id}`)
       .then((res) => res.json())
       .then((data) => setPost(data));
   }, [id]);
 
   // Vote handler
   const handleVote = (type) => {
-    fetch(`http://localhost:5000/posts/vote/${id}`, {
+    fetch(`https://speak-stack-server.vercel.app/posts/vote/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ type }),
@@ -52,7 +52,7 @@ const PostDetails = () => {
         reportedAt: new Date(),
       };
 
-      fetch("http://localhost:5000/api/reports", {
+      fetch("https://speak-stack-server.vercel.app/api/reports", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(reportData),

@@ -17,7 +17,6 @@ import ContactUs from "../components/ContactUs";
 import Services from "../components/Services";
 import Login from "../pages/authentication/Login";
 import Register from "../pages/authentication/Register";
-import CommentsPage from "../components/comments/Comments";
 import AnnouncementsSection from "../components/ui/AnnouncementsSection";
 import Notification from "../components/Notification";
 import PostPages from "../components/posts/PostPages";

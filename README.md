@@ -1,12 +1,79 @@
-# React + Vite
+# 📢 SpeakStack - A Community Forum Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**SpeakStack** is a full-featured MERN stack forum web application where users can share thoughts, discuss ideas, comment, vote, and interact with community posts. It includes user dashboards, admin controls, membership perks, and reporting functionality.
 
-Currently, two official plugins are available:
+## 🔗 Live Links
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Client**: [SpeakStack]( https://speakstack-a1b8a.web.app)
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🧠 Features
+
+### ✅ Authentication & Authorization
+- Firebase Auth (Email/Password, Google)
+- JWT-based protected routes
+- Role-based access (user/admin)
+
+### 📬 Post Features
+- Add Post (limit to 5 posts unless member)
+- Tag-based search
+- Vote (upvote/downvote)
+- Sort by Newest / Popularity (vote difference)
+- View full post details
+- Paginated (5 per page)
+
+### 💬 Comment System
+- View all comments on post details page
+- Show email, truncated comment text (20 chars), "Read More" modal
+- Feedback dropdown (static 3 options)
+- Report button enabled only after feedback selected
+- Prevent duplicate reporting
+
+### 🏆 Membership System
+- Payment via Stripe
+- Upgrades user to Gold membership
+- Unlocks ability to post unlimited content
+- Shows Gold badge
+
+### 📣 Announcement System
+- Admin can post announcements
+- Users can view them
+- Unread count shown as notification
+
+### 🧑 User Dashboard
+- View profile info + badges
+- See last 3 posts
+- Add Post form
+- My Posts: table with delete + comment view access
+
+### 🛠️ Admin Dashboard
+- Admin Profile
+- Manage Users (Make Admin, Search)
+- View and delete reported comments
+- Post announcements
+
+---
+
+## 🔧 Technologies
+
+### Frontend:
+- React + Vite
+- Tailwind CSS + DaisyUI
+- React Router DOM
+- React Hook Form
+- Axios + AxiosSecure (with JWT)
+- TanStack Query v5
+- Firebase Auth
+- Stripe
+
+### Backend:
+- Node.js + Express
+- MongoDB + MongoDB Atlas
+- CORS, Dotenv, JWT
+- Vercel deployment
+
+---
+
+## 📂 Folder Structure (Frontend)
+
