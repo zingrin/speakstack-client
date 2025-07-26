@@ -44,7 +44,7 @@ const Comments = ({ postId, postTitle }) => {
     const comment = {
       postId,
       user: user?.email,
-      text,
+        commentText: text,
       createdAt: new Date(),
     };
 
@@ -119,7 +119,7 @@ const Comments = ({ postId, postTitle }) => {
               className="bg-gray-100 p-3 rounded relative shadow"
             >
               <p className="text-sm text-gray-600 mb-1">{c.user}</p>
-              <p>{c.text}</p>
+              <p>{c.commentText}</p>
 
               <button
                 onClick={() => handleReportComment(c)}

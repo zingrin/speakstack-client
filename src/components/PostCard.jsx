@@ -20,26 +20,26 @@ const PostCard = ({ post }) => {
     month: "short",
     year: "numeric",
   });
-console.log(author);
+
   return (
-    <div className="card bg-base-100 shadow-md hover:shadow-lg transition-all duration-200">
-      <div className="card-body">
+    <div className="w-full max-w-2xl mx-auto card bg-base-100 shadow-md hover:shadow-lg border border-gray-100 transition-all duration-200 mb-6">
+      <div className="card-body px-6 py-4">
         {/* Author Info */}
         <div className="flex items-center gap-3 mb-2">
           <img
             src={authorImage}
             alt="author"
-            className="w-9 h-9 rounded-full object-cover border"
+            className="w-10 h-10 rounded-full object-cover border"
           />
           <div>
-            {/* <p className="font-semibold text-sm">{author}</p> */}
-            <p className="text-xs text-gray-500">{formattedDate}</p>
+            <p className="font-semibold text-sm text-gray-700">{author}</p>
+            <p className="text-xs text-gray-400">{formattedDate}</p>
           </div>
         </div>
 
         {/* Title */}
         <Link to={`/post/${_id}`}>
-          <h2 className="card-title hover:underline">{title}</h2>
+          <h2 className="card-title text-lg hover:underline leading-snug">{title}</h2>
         </Link>
 
         {/* Tags */}
@@ -54,7 +54,7 @@ console.log(author);
           ))}
         </div>
 
-        {/* Stats: Votes and Comments */}
+        {/* Stats */}
         <div className="flex justify-between items-center mt-4 text-sm text-gray-600">
           <div className="flex items-center gap-2">
             <FaArrowUp className="text-green-500" />
@@ -65,7 +65,7 @@ console.log(author);
           </div>
 
           <div className="flex items-center gap-2">
-            <FaRegComments />
+            <FaRegComments className="text-blue-500" />
             <span>{commentsCount} Comments</span>
           </div>
         </div>

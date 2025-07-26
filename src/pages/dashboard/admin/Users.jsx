@@ -25,7 +25,7 @@ const Users = () => {
       } finally {
         setLoading(false);
       }
-    }, 400); 
+    }, 400);
 
     return () => clearTimeout(debounceRef.current);
   }, [axiosSecure, searchTerm]);
@@ -61,47 +61,51 @@ const Users = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto bg-white dark:bg-base-100 rounded shadow-md p-6">
-      <h2 className="text-2xl font-bold mb-4">👥 Manage Users</h2>
+    <div className="max-w-7xl mx-auto bg-white dark:bg-base-100 rounded shadow-md p-4 sm:p-6 md:p-8">
+      <h2 className="text-2xl font-bold mb-4 text-center md:text-left">
+        👥 Manage Users
+      </h2>
 
-      <input
-        type="text"
-        placeholder="Search by username"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className="input input-bordered w-full max-w-sm mb-4"
-      />
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-4">
+        <input
+          type="text"
+          placeholder="Search by username"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="input input-bordered w-full sm:w-64"
+          aria-label="Search users"
+        />
+      </div>
 
       {loading ? (
         <div className="text-center py-6 text-gray-600">Loading users...</div>
       ) : (
         <div className="overflow-x-auto">
-          <table className="table w-full">
+          <table className="table w-full min-w-[600px] md:min-w-full">
             <thead>
               <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Membership</th>
-                <th>Action</th>
+                <th className="whitespace-nowrap">#</th>
+                <th className="whitespace-nowrap">Name</th>
+                <th className="whitespace-nowrap">Email</th>
+                <th className="whitespace-nowrap">Role</th>
+                <th className="whitespace-nowrap">Membership</th>
+                <th className="whitespace-nowrap">Action</th>
               </tr>
             </thead>
             <tbody>
               {users?.length > 0 ? (
-                users?.map((user, index) => (
+                users.map((user, index) => (
                   <tr key={user._id}>
-                    <td>{index + 1}</td>
-                    
-                    <td>{user?.name || "Unknown"}</td>
-                    <td>{user?.email}</td>
-                    <td className="capitalize font-medium">{user?.role || "user"}</td>
-                    <td>
+                    <td className="whitespace-nowrap">{index + 1}</td>
+                    <td className="whitespace-nowrap">{user?.name || "Unknown"}</td>
+                    <td className="whitespace-nowrap break-all">{user?.email}</td>
+                    <td className="capitalize font-medium whitespace-nowrap">{user?.role || "user"}</td>
+                    <td className="whitespace-nowrap">
                       {user?.membership === "member" || user?.membership === true
                         ? "✅ Member"
                         : "❌ Non-Member"}
                     </td>
-                    <td>
+                    <td className="whitespace-nowrap">
                       {user?.role !== "admin" ? (
                         <button
                           onClick={() => handleMakeAdmin(user._id)}
@@ -117,7 +121,7 @@ const Users = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="7" className="text-center py-4 text-gray-500">
+                  <td colSpan="6" className="text-center py-4 text-gray-500">
                     No users found.
                   </td>
                 </tr>

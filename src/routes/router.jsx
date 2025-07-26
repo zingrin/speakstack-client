@@ -26,11 +26,13 @@ import MembershipPage from "../pages/MembershipPage";
 import Users from "../pages/dashboard/admin/Users";
 import AdminProfile from "../pages/dashboard/admin/AdminProfile";
 import CommentList from "../pages/CommentList";
+import NotFound from "../pages/NotFound";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout />,
+    errorElement:<NotFound></NotFound>,
     children: [
       { path: "/", element: <Home /> },
       { path: "/join", element: <JoinUs /> },
