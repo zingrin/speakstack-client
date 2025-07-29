@@ -36,7 +36,7 @@ const MyProfile = () => {
       <img
         src={
           userInfo.image ||
-          "https://i.ibb.co/M5Sny2F9/306bb1a7-088d-49c1-ba91-c5033459d1c2.jpg"
+          "https://ibb.co/RG2S55jJ"
         }
         alt="Profile"
         className="w-24 h-24 rounded-full mx-auto border-4 border-primary mb-4"
