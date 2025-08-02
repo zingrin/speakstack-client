@@ -5,7 +5,7 @@ const PopularCourses = () => {
   const { data: courses = [], isLoading, error } = useQuery({
     queryKey: ["popularCourses"],
     queryFn: async () => {
-      const res = await axios.get("http://localhost:5000/courses/popular");
+      const res = await axios.get("https://speak-stack-server.vercel.app/courses/popular");
       return res.data;
     },
   });

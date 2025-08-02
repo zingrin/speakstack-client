@@ -13,7 +13,7 @@ const Navbar = () => {
         <NavLink
           to="/"
           className={({ isActive }) =>
-            isActive ? "font-semibold text-primary" : "hover:text-primary"
+            isActive ? "font-semibold text-secondary" : "hover:text-secondary"
           }
         >
           Home
@@ -23,31 +23,22 @@ const Navbar = () => {
         <NavLink
           to="/allPost"
           className={({ isActive }) =>
-            isActive ? "font-semibold text-primary" : "hover:text-primary"
+            isActive ? "font-semibold text-secondary" : "hover:text-secondary"
           }
         >
           All Post
         </NavLink>
       </li>
-      <li>
-        <NavLink
-          to="/membership"
-          className={({ isActive }) =>
-            isActive ? "font-semibold text-primary" : "hover:text-primary"
-          }
-        >
-          Membership
-        </NavLink>
-      </li>
+
       {user && (
         <li>
           <NavLink
-            to="/dashboard"
+            to="/membership"
             className={({ isActive }) =>
-              isActive ? "font-semibold text-primary" : "hover:text-primary"
+              isActive ? "font-semibold text-secondary" : "hover:text-secondary"
             }
           >
-            Dashboard
+            Membership
           </NavLink>
         </li>
       )}
@@ -56,10 +47,10 @@ const Navbar = () => {
 
   return (
     <div className="bg-primary text-white shadow-md sticky top-0 z-50">
-      <div className="navbar max-w-7xl mx-auto px-4">
-        {/* Mobile Drawer */}
-        <div className="navbar-start lg:hidden">
-          <div className="dropdown">
+      <div className="navbar max-w-7xl mx-auto px-4 flex items-center justify-between">
+        {/* Logo (Left Side) */}
+        <div className="flex items-center gap-3">
+          <div className="dropdown lg:hidden">
             <label tabIndex={0} className="btn btn-ghost btn-circle">
               <FaBars className="text-xl" />
             </label>
@@ -73,7 +64,9 @@ const Navbar = () => {
                   <NavLink
                     to="/join"
                     className={({ isActive }) =>
-                      isActive ? "font-semibold text-primary" : "hover:text-primary"
+                      isActive
+                        ? "font-semibold text-primary"
+                        : "hover:text-primary"
                     }
                   >
                     Join Us
@@ -83,30 +76,22 @@ const Navbar = () => {
             </ul>
           </div>
 
-          {/* Logo with icon */}
           <Link
             to="/"
-            className="btn btn-ghost normal-case flex items-center text-xl font-bold space-x-2"
+            className="flex items-center gap-2 btn btn-ghost normal-case text-xl font-bold"
           >
             <FaComments className="text-3xl text-yellow-400" />
             <span>SpeakStack</span>
           </Link>
         </div>
 
-        {/* Desktop Nav */}
-        <div className="navbar-center hidden lg:flex">
-          <Link
-            to="/"
-            className="btn btn-ghost normal-case flex items-center text-2xl font-bold space-x-2"
-          >
-            <FaComments className="text-4xl text-yellow-400" />
-            <span>SpeakStack</span>
-          </Link>
-        </div>
+        {/* Center Nav (Large screens only) */}
+        <ul className="hidden lg:flex menu menu-horizontal px-1 gap-4">
+          {navLinks}
+        </ul>
 
-        <div className="navbar-end flex items-center space-x-4">
-          <ul className="menu menu-horizontal px-1 hidden lg:flex">{navLinks}</ul>
-
+        {/* Right Side (Profile, Notifications, Auth Buttons) */}
+        <div className="flex items-center gap-4">
           {!user && (
             <Link
               to="/join"
@@ -118,16 +103,14 @@ const Navbar = () => {
 
           {user && (
             <>
-              {/* Notification Icon */}
-                <Notification />
+              <Notification />
 
-              {/* Profile Dropdown */}
               <div className="dropdown dropdown-end">
                 <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
                   <div className="w-10 rounded-full ring ring-white ring-offset-base-100 ring-offset-2">
                     <img
-                      src={user.photoURL || "/default.png"}
-                      alt="User Avatar"
+                      src={user.photoURL}
+                      alt="profile"
                       referrerPolicy="no-referrer"
                     />
                   </div>
@@ -137,7 +120,7 @@ const Navbar = () => {
                   className="mt-3 p-2 shadow menu menu-sm dropdown-content bg-white text-black rounded-box w-52"
                 >
                   <li>
-                    <p className="font-semibold">{user.displayName || "User"}</p>
+                    <p className="font-semibold">{user.displayName}</p>
                   </li>
                   <li>
                     <Link to="/dashboard">Dashboard</Link>

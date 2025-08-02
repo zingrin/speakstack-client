@@ -27,12 +27,13 @@ import Users from "../pages/dashboard/admin/Users";
 import AdminProfile from "../pages/dashboard/admin/AdminProfile";
 import CommentList from "../pages/CommentList";
 import NotFound from "../pages/NotFound";
+import DashboardRedirect from "../contexts/DashboardRedirect";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout />,
-    errorElement:<NotFound></NotFound>,
+    errorElement: <NotFound></NotFound>,
     children: [
       { path: "/", element: <Home /> },
       { path: "/join", element: <JoinUs /> },
@@ -52,22 +53,23 @@ const router = createBrowserRouter([
           </PrivateRoute>
         ),
       },
-            {path: "/allPost", element: <AllPosts></AllPosts>},
+      { path: "/allPost", element: <AllPosts></AllPosts> },
 
       { path: "/post/:id", element: <PostDetails /> },
-      {path:"post-page", element: <PostPages></PostPages>},
+      { path: "post-page", element: <PostPages></PostPages> },
       { path: "/about", element: <AboutUs></AboutUs> },
       { path: "/contact", element: <ContactUs></ContactUs> },
       { path: "/services", element: <Services></Services> },
-      {path: "/announcements", element: <AnnouncementsSection></AnnouncementsSection>},
-      {path:"notification/:id", element: <Notification></Notification>},
+      {
+        path: "/announcements",
+        element: <AnnouncementsSection></AnnouncementsSection>,
+      },
+      { path: "notification/:id", element: <Notification></Notification> },
       {
         path: "/comments/:postId",
-        element: (
-          <PrivateRoute>
+        element: 
             <CommentList />
-          </PrivateRoute>
-        ),
+        
       },
     ],
   },
@@ -79,6 +81,7 @@ const router = createBrowserRouter([
         path: "user",
         element: <UserDashboardLayout />,
         children: [
+          { index: true, element: <DashboardRedirect /> },
           { path: "profile", element: <MyProfile /> },
           { path: "add-post", element: <AddPost /> },
           { path: "my-posts", element: <MyPosts /> },
@@ -88,7 +91,9 @@ const router = createBrowserRouter([
         path: "admin",
         element: <AdminDashboardLayout />,
         children: [
-          {path:"admin-profile",element: <AdminProfile></AdminProfile>},
+          { index: true, element: <DashboardRedirect /> },
+
+          { path: "admin-profile", element: <AdminProfile></AdminProfile> },
           { path: "users", element: <Users /> },
           { path: "reports", element: <Reports /> },
           { path: "announcement", element: <Announcement /> },

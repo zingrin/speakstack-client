@@ -62,9 +62,7 @@ const SocialLogin = ({ from }) => {
       <button onClick={handleGoogle} className="btn btn-outline w-full">
         <FaGoogle className="mr-2" /> Continue with Google
       </button>
-      <button onClick={handleGithub} className="btn btn-outline w-full">
-        <FaGithub className="mr-2" /> Continue with GitHub
-      </button>
+      
     </div>
   );
 };

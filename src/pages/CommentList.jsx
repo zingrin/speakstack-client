@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 import useAxiosSecure from "../hooks/useAxiosSecure";
 
 const CommentList = () => {
-  const {  postId } = useParams(); 
+  const { postId } = useParams();
   const axiosSecure = useAxiosSecure();
   const [selectedFeedback, setSelectedFeedback] = useState({});
   const [reportedComments, setReportedComments] = useState([]);
@@ -15,11 +15,11 @@ const CommentList = () => {
   const { data: comments = [], isLoading } = useQuery({
     queryKey: ["comments", postId],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/api/comments/${postId}`);
+      const res = await axiosSecure.get(`/comments/${postId}`);
       return res.data;
     },
   });
-console.log(postId);
+
   const feedbackOptions = [
     "Inappropriate language",
     "Irrelevant comment",
@@ -35,9 +35,9 @@ console.log(postId);
       await axiosSecure.post("/api/reports", {
         commentId: comment._id,
         postId,
-        Email: comment.email,
+        Email: comment.user, 
         feedback: selectedFeedback[comment._id],
-        text: comment.text,
+        text: comment.commentText,
       });
 
       setReportedComments((prev) => [...prev, comment._id]);
@@ -81,26 +81,26 @@ console.log(postId);
                 const isReported = reportedComments.includes(comment._id);
                 const feedbackSelected = selectedFeedback[comment._id];
                 const shortText =
-                  comment.text.length > 20
-                    ? `${comment.text.slice(0, 20)}... `
-                    : comment.text;
+                  comment.commentText.length > 20
+                    ? `${comment.commentText.slice(0, 20)}... `
+                    : comment.commentText;
 
                 return (
                   <tr key={comment._id}>
-                    <td>{comment.email}</td>
+                    <td>{comment.user}</td>
                     <td>
-                      {comment.text.length > 20 ? (
+                      {comment.commentText.length > 20 ? (
                         <>
                           {shortText}
                           <button
-                            onClick={() => openModal(comment.text)}
+                            onClick={() => openModal(comment.commentText)}
                             className="link text-blue-600 hover:underline"
                           >
                             Read More
                           </button>
                         </>
                       ) : (
-                        comment.text
+                        comment.commentText
                       )}
                     </td>
                     <td>
@@ -140,21 +140,15 @@ console.log(postId);
 
       {/* Modal for full comment */}
       {showModal && (
-        <dialog
-          open
-          className="modal modal-open bg-black/50"
-          onClose={closeModal}
-        >
-          <form method="dialog" className="modal-box">
-            <h3 className="font-bold text-lg">Full Comment</h3>
-            <p className="py-4">{modalContent}</p>
-            <div className="modal-action">
-              <button className="btn" onClick={closeModal}>
-                Close
-              </button>
-            </div>
-          </form>
-        </dialog>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg w-96 max-w-full shadow-lg">
+            <h3 className="text-lg font-semibold mb-2">Full Comment</h3>
+            <p className="mb-4">{modalContent}</p>
+            <button className="btn btn-sm btn-primary" onClick={closeModal}>
+              Close
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );

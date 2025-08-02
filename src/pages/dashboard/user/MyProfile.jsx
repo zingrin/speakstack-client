@@ -35,9 +35,11 @@ const MyProfile = () => {
     <div className="max-w-md mx-auto mt-10 bg-white shadow-xl rounded-xl p-6 text-center">
       <img
         src={
-          userInfo.image ||
-          "https://ibb.co/RG2S55jJ"
+          userInfo.image 
+        
+          
         }
+        referrerPolicy="no-referer"
         alt="Profile"
         className="w-24 h-24 rounded-full mx-auto border-4 border-primary mb-4"
       />

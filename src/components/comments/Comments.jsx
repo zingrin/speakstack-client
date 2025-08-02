@@ -8,7 +8,6 @@ const Comments = ({ postId, postTitle }) => {
   const { user } = useAuth();
   const [text, setText] = useState("");
 
-  // ✅ Fetch comments
   const {
     data: comments = [],
     isLoading,
@@ -16,15 +15,14 @@ const Comments = ({ postId, postTitle }) => {
   } = useQuery({
     queryKey: ["comments", postId],
     queryFn: async () => {
-      const res = await axios.get(`http://localhost:5000/comments/${postId}`);
+      const res = await axios.get(`https://speak-stack-server.vercel.app/comments/${postId}`);
       return res.data;
     },
   });
 
-  // ✅ Add new comment
   const commentMutation = useMutation({
     mutationFn: async (newComment) => {
-      const res = await axios.post("http://localhost:5000/comments", newComment);
+      const res = await axios.post("https://speak-stack-server.vercel.app/comments", newComment);
       return res.data;
     },
     onSuccess: () => {
@@ -36,31 +34,34 @@ const Comments = ({ postId, postTitle }) => {
     },
   });
 
-  // ✅ Handle comment submit
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!text.trim()) return;
 
+    if (!user?.email) {
+      return Swal.fire("Login Required", "Please log in to comment.", "warning");
+    }
+
     const comment = {
       postId,
-      user: user?.email,
-        commentText: text,
+      user: user.email,
+      commentText: text,
       createdAt: new Date(),
     };
 
     commentMutation.mutate(comment);
   };
 
-  // ✅ Handle Report Comment
   const handleReportComment = async (commentObj) => {
+    if (!user?.email) {
+      return Swal.fire("Login Required", "Please log in to report.", "warning");
+    }
+
     const { value: reason } = await Swal.fire({
       title: "Report this comment",
       input: "textarea",
       inputLabel: "Reason for report",
       inputPlaceholder: "Type your reason here...",
-      inputAttributes: {
-        "aria-label": "Reason",
-      },
       showCancelButton: true,
     });
 
@@ -68,14 +69,14 @@ const Comments = ({ postId, postTitle }) => {
       const reportData = {
         postId,
         postTitle,
-        reporterEmail: user?.email,
+        reporterEmail: user.email,
         comment: commentObj,
         feedback: reason,
         reportedAt: new Date(),
       };
 
       try {
-        const res = await axios.post("http://localhost:5000/api/reports", reportData);
+        const res = await axios.post("https://speak-stack-server.vercel.app/reports", reportData);
         if (res.data.insertedId) {
           Swal.fire("Reported!", "Thanks for your feedback.", "success");
         } else {
@@ -101,9 +102,12 @@ const Comments = ({ postId, postTitle }) => {
         />
         <button
           type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-fit"
+          disabled={commentMutation.isLoading}
+          className={`bg-blue-600 text-white px-4 py-2 rounded w-fit ${
+            commentMutation.isLoading ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-700"
+          }`}
         >
-          Submit
+          {commentMutation.isLoading ? "Posting..." : "Submit"}
         </button>
       </form>
 
@@ -114,10 +118,7 @@ const Comments = ({ postId, postTitle }) => {
       ) : (
         <ul className="space-y-4">
           {comments.map((c) => (
-            <li
-              key={c._id}
-              className="bg-gray-100 p-3 rounded relative shadow"
-            >
+            <li key={c._id} className="bg-gray-100 p-3 rounded relative shadow">
               <p className="text-sm text-gray-600 mb-1">{c.user}</p>
               <p>{c.commentText}</p>
 

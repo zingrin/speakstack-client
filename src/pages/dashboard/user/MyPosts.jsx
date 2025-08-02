@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router"; 
+import { Link } from "react-router";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useAuth from "../../../hooks/useAuth";
 import Swal from "sweetalert2";
@@ -12,7 +12,7 @@ const MyPosts = () => {
   useEffect(() => {
     if (user?.email) {
       axiosSecure
-        .get(`/posts?email=${user.email}`)
+        .get(`https://speak-stack-server.vercel.app/posts?email=${user.email}`)
         .then((res) => {
           setPosts(Array.isArray(res.data) ? res.data : []);
         })
@@ -35,7 +35,7 @@ const MyPosts = () => {
 
     if (result.isConfirmed) {
       try {
-        const res = await axiosSecure.delete(`/comments/${postId}`);
+        const res = await axiosSecure.delete(`https://speak-stack-server.vercel.app/posts/${postId}`);
         if (res.data.deletedCount > 0) {
           setPosts((prev) => prev.filter((post) => post._id !== postId));
           Swal.fire("Deleted!", "Your post has been deleted.", "success");
@@ -58,7 +58,7 @@ const MyPosts = () => {
             <tr>
               <th>Title</th>
               <th>Votes</th>
-              <th>Unvotes</th> 
+              <th>Unvotes</th>
               <th>Comments</th>
               <th>Actions</th>
             </tr>
@@ -68,10 +68,10 @@ const MyPosts = () => {
               <tr key={post._id}>
                 <td>{post.title}</td>
                 <td>{post.upVote || 0}</td>
-                <td>{post.downVote || 0}</td> 
+                <td>{post.downVote || 0}</td>
                 <td>
                   <Link
-                    to={`/comments/${post._id}`}
+                    to={`/comments/${post._id}`} 
                     className="btn btn-xs btn-info text-white"
                   >
                     View Comments

@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useContext, useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate, useLocation } from "react-router";
+import Swal from "sweetalert2";
 import SocialLogin from "./SocialLogin";
 import AuthContext from "../../contexts/AuthContexts";
 
@@ -8,12 +9,27 @@ const Login = () => {
   const { loginWithEmail } = useContext(AuthContext);
   const [error, setError] = useState("");
   const { register, handleSubmit } = useForm();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const onSubmit = async (data) => {
     setError("");
     try {
       await loginWithEmail(data.email, data.password);
-      // Redirect or success handled outside this component
+
+      // Show success alert
+      await Swal.fire({
+        icon: "success",
+        title: "Login Successful",
+        text: "Welcome back!",
+        timer: 1500,
+        showConfirmButton: false,
+      });
+
+      // Redirect after success
+      const redirectTo = location.state?.from?.pathname || "/";
+      navigate(redirectTo, { replace: true });
+
     } catch (err) {
       setError(err.message || "Failed to login");
     }
@@ -22,7 +38,7 @@ const Login = () => {
   return (
     <div className="max-w-sm mx-auto bg-white shadow-md rounded p-6">
       <h2 className="text-2xl font-semibold mb-4 text-center">Login</h2>
-      
+
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {/* Email */}
         <div>
@@ -55,11 +71,11 @@ const Login = () => {
 
       <div className="divider">OR</div>
 
-<SocialLogin from={location.state?.from?.pathname || "/"} />
+      <SocialLogin from={location.state?.from?.pathname || "/"} />
 
       {/* Register link */}
       <p className="mt-6 text-center text-sm text-gray-700">
-        Don&apos;t have an account?
+        Don&apos;t have an account?{" "}
         <Link to="/register" className="text-primary font-semibold hover:underline">
           Register
         </Link>

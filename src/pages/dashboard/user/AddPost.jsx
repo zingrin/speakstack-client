@@ -37,7 +37,7 @@ const AddPost = () => {
     const getPostCount = async () => {
       try {
         const response = await axiosSecure.get(
-          `/posts/count?userEmail=${user.email}`
+          `https://speak-stack-server.vercel.app/posts/count?userEmail=${user.email}`
         );
         setPostCount(response.data.count || 0);
       } catch (error) {
@@ -103,11 +103,11 @@ const AddPost = () => {
       upVoters: [],
       downVoters: [],
       commentsCount: 0,
-      image: "", // Optional image URL
+      image: "", 
     };
 
     try {
-      await axiosSecure.post("/posts", newPost);
+      await axiosSecure.post("https://speak-stack-server.vercel.app/posts", newPost);
       Swal.fire({
         icon: "success",
         title: "Post Created",

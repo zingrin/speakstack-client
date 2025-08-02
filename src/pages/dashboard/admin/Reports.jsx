@@ -11,7 +11,7 @@ const Reports = () => {
   useEffect(() => {
     const fetchReports = async () => {
       try {
-        const res = await axiosSecure.get("/api/reports");
+        const res = await axiosSecure.get("https://speak-stack-server.vercel.app/api/reports");
         setReports(res.data);
       } catch (error) {
         console.error("Failed to fetch reports:", error);
@@ -54,25 +54,23 @@ const Reports = () => {
   };
 
   if (loading)
-    return <div className="text-center my-10">Loading reports...</div>;
+    return <div className="text-center my-10 text-lg">Loading reports...</div>;
 
   return (
-    <div className="max-w-6xl mx-auto bg-white dark:bg-base-100 rounded shadow-md p-6">
-      <h3 className="text-2xl font-bold mb-4">🚩 Reported Comments</h3>
+    <div className="max-w-7xl mx-auto px-4 py-6">
+      <h3 className="text-2xl font-bold mb-4 text-center sm:text-left">🚩 Reported Comments</h3>
 
       {reports.length === 0 ? (
-        <p>No reports found.</p>
+        <p className="text-center">No reports found.</p>
       ) : (
         <div className="overflow-x-auto">
-          <table className="table w-full">
+          <table className="table w-full min-w-[700px]">
             <thead>
-              <tr>
+              <tr className="text-sm sm:text-base">
                 <th>#</th>
                 <th>Post Title</th>
-                <th>Comment</th>
                 <th>Reporter Email</th>
                 <th>Feedback</th>
-
                 <th>Status</th>
                 <th>Action</th>
               </tr>
@@ -81,31 +79,13 @@ const Reports = () => {
               {reports.map((report, index) => (
                 <tr
                   key={report._id}
-                  className={report.resolved ? "bg-green-50" : ""}
+                  className={`text-sm sm:text-base ${report.resolved ? "bg-green-50" : ""}`}
                 >
                   <td>{index + 1}</td>
                   <td>{report.postTitle || "N/A"}</td>
-                  <td>
-                    {report.comment?.text?.length > 20 ? (
-                      <>
-                        {report.comment.text.slice(0, 20)}...
-                        <button
-                          className="text-blue-600 ml-1 underline"
-                          onClick={() =>
-                            setSelectedComment(report.comment.text)
-                          }
-                        >
-                          Read More
-                        </button>
-                      </>
-                    ) : (
-                      report.comment?.text || "No comment"
-                    )}
-                  </td>
-
-                  <td>{report.reporterEmail}</td>
-                  <td>{report.feedback}</td>
-
+                  
+                  <td className="break-all">{report.reporterEmail}</td>
+                  <td className="max-w-[150px] truncate">{report.feedback}</td>
                   <td className="font-semibold">
                     {report.resolved ? (
                       <span className="text-green-600">Resolved</span>
@@ -117,14 +97,12 @@ const Reports = () => {
                     {!report.resolved ? (
                       <button
                         onClick={() => handleResolve(report._id)}
-                        className="btn btn-xs btn-success"
+                        className="btn btn-xs btn-success whitespace-nowrap"
                       >
                         Mark Resolved
                       </button>
                     ) : (
-                      <span className="text-green-600 font-semibold">
-                        ✔ Done
-                      </span>
+                      <span className="text-green-600 font-semibold text-xs">✔ Done</span>
                     )}
                   </td>
                 </tr>
@@ -141,11 +119,11 @@ const Reports = () => {
           onClick={() => setSelectedComment(null)}
         >
           <div
-            className="bg-white dark:bg-gray-800 rounded p-6 w-full max-w-md shadow-lg"
+            className="bg-white dark:bg-gray-800 rounded p-6 w-11/12 sm:w-full max-w-md shadow-lg"
             onClick={(e) => e.stopPropagation()}
           >
             <h4 className="text-lg font-bold mb-2">Full Comment</h4>
-            <p className="text-gray-800 dark:text-gray-100">
+            <p className="text-gray-800 dark:text-gray-100 text-sm whitespace-pre-line">
               {selectedComment}
             </p>
             <div className="mt-4 text-right">
