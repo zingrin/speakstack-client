@@ -41,7 +41,7 @@ const trendingCourses = [
     price: 159,
     description: "Build web applications using Python and Django framework.",
     image:
-      "https://i.ibb.co/6Xb0N2z/python-web.jpg",
+      "https://i.ibb.co.com/SXpZDyS4/images-q-tbn-ANd9-Gc-Qtyr-GN03-F-Pkn4-CXQRrl-UNz2-GR3i-Ohb-Xcmeww-Hwk-SZ-hn7-RND477p8-NMpywzb-P4m3e.png",
   },
   {
     id: 6,
@@ -50,7 +50,7 @@ const trendingCourses = [
     price: 399,
     description: "Complete guide to Artificial Intelligence and Machine Learning projects.",
     image:
-      "https://i.ibb.co/8cH0XGv/ai-ml.jpg",
+      "https://i.ibb.co.com/JjFw75fk/images-q-tbn-ANd9-Gc-Q9l-OODpz9z-XUdp-Doe8-HU5-YKkd-ky-XQKd-Dz2-Pbh-Gt5-UIIq-Yy2qcx3uc8-UETRLT9n-Ky.jpg",
   },
 ];
 
