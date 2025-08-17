@@ -31,16 +31,38 @@ const Navbar = () => {
       </li>
 
       {user && (
-        <li>
-          <NavLink
-            to="/membership"
-            className={({ isActive }) =>
-              isActive ? "font-semibold text-secondary" : "hover:text-secondary"
-            }
-          >
-            Membership
-          </NavLink>
-        </li>
+        <>
+          <li>
+            <NavLink
+              to="/membership"
+              className={({ isActive }) =>
+                isActive ? "font-semibold text-secondary" : "hover:text-secondary"
+              }
+            >
+              Membership
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/trendingCourses"
+              className={({ isActive }) =>
+                isActive ? "font-semibold text-secondary" : "hover:text-secondary"
+              }
+            >
+              Trending Courses
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/services"
+              className={({ isActive }) =>
+                isActive ? "font-semibold text-secondary" : "hover:text-secondary"
+              }
+            >
+              Services
+            </NavLink>
+          </li>
+        </>
       )}
     </>
   );
@@ -64,9 +86,7 @@ const Navbar = () => {
                   <NavLink
                     to="/join"
                     className={({ isActive }) =>
-                      isActive
-                        ? "font-semibold text-primary"
-                        : "hover:text-primary"
+                      isActive ? "font-semibold text-primary" : "hover:text-primary"
                     }
                   >
                     Join Us

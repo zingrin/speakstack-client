@@ -22,7 +22,7 @@ const PostList = () => {
     return <div className="text-center py-10">Loading posts...</div>;
   }
 
-  if (posts?.length) {
+  if (!posts?.length) {
     return <div className="text-center py-10">No posts found.</div>;
   }
 

@@ -29,6 +29,7 @@ import CommentList from "../pages/CommentList";
 import NotFound from "../pages/NotFound";
 import DashboardRedirect from "../contexts/DashboardRedirect";
 import TrendingCourseDetail from "../components/TrendingCourseDetail";
+import TrendingCourses from "../pages/TrendngCourses";
 
 const router = createBrowserRouter([
   {
@@ -54,7 +55,7 @@ const router = createBrowserRouter([
           </PrivateRoute>
         ),
       },
-              {path:"/trending/:id", element:<TrendingCourseDetail />},
+        {path:"/trending/:id", element:<TrendingCourseDetail />},
 
       { path: "/allPost", element: <AllPosts></AllPosts> },
 
@@ -63,6 +64,7 @@ const router = createBrowserRouter([
       { path: "/about", element: <AboutUs></AboutUs> },
       { path: "/contact", element: <ContactUs></ContactUs> },
       { path: "/services", element: <Services></Services> },
+      {path: "/trendingCourses", element: <TrendingCourses></TrendingCourses>},
       {
         path: "/announcements",
         element: <AnnouncementsSection></AnnouncementsSection>,

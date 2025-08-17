@@ -1,74 +1,28 @@
-import { useEffect, useState } from "react";
 import Banner from "../components/home/Banner";
 import TagFilter from "../components/TagFilter";
-import Pagination from "../components/home/Pagination";
 import WhyChooseUs from "../components/WhyChooseUs";
-import PostCard from "../components/PostCard";
 import FeaturedDiscussion from "../components/home/FeaturedDiscussion";
 import TrendingCourses from "./TrendngCourses";
 import AnnouncementsSection from "../components/ui/AnnouncementsSection";
-
-const POSTS_PER_PAGE = 5;
+import Services from "../components/Services";
+import AllPosts from "../components/AllPost";
 
 const Home = () => {
-  const [posts, setPosts] = useState([]);
-  const [filtered, setFiltered] = useState([]);
-  const [page, setPage] = useState(1);
-
-  useEffect(() => {
-    fetch("https://speak-stack-server.vercel.app/posts")
-      .then((res) => res.json())
-      .then((data) => {
-        setPosts(data);
-        setFiltered(data);
-      });
-  }, []);
-
-  const handleTagSearch = (tag = "", sortBy = "newest") => {
-    let url = "https://speak-stack-server.vercel.app/posts";
-
-    if (tag) url += `/tag/${tag}`;
-    url += `?sort=${sortBy}`;
-
-    fetch(url)
-      .then((res) => res.json())
-      .then((data) => {
-        setFiltered(data);
-        setPage(1);
-      });
-  };
-
-  // Pagination
-  const totalPages = Math.ceil(filtered.length / POSTS_PER_PAGE);
-  const paginatedPosts = filtered.slice(
-    (page - 1) * POSTS_PER_PAGE,
-    page * POSTS_PER_PAGE
-  );
-
   return (
     <>
-      <Banner onSearch={handleTagSearch} />
-      <TagFilter onTagClick={handleTagSearch} />
+      {/* Banner and Tag Filter */}
+      <Banner />
+      <TagFilter />
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 my-6">
-        {paginatedPosts.length > 0 ? (
-          paginatedPosts.map((post) => (
-            <PostCard key={post._id} post={post} />
-          ))
-        ) : (
-          <p className="text-center col-span-3 text-gray-500">
-            No posts found for this tag.
-          </p>
-        )}
-      </div>
+      {/* All Posts with Pagination handled inside */}
+      <AllPosts />
 
-      {totalPages > 1 && (
-        <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
-      )}
-      <AnnouncementsSection></AnnouncementsSection>
-      <FeaturedDiscussion></FeaturedDiscussion>
-      <TrendingCourses></TrendingCourses>
+      {/* Other sections */}
+      <AnnouncementsSection />
+      <FeaturedDiscussion />
+      <TrendingCourses />
       <WhyChooseUs />
+      <Services />
     </>
   );
 };

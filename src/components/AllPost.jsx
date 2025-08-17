@@ -1,64 +1,64 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router";
+import PostCard from "./PostCard";
+import Pagination from "./home/Pagination";
+
+const POSTS_PER_PAGE = 6;
 
 const AllPosts = () => {
   const [posts, setPosts] = useState([]);
+  const [filteredPosts, setFilteredPosts] = useState([]);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
-    fetch("https://speak-stack-server.vercel.app/posts") 
+    fetch("https://speak-stack-server.vercel.app/posts")
       .then((res) => res.json())
-      .then((data) => setPosts(data))
+      .then((data) => {
+        // নতুন পোস্ট আগে দেখানোর জন্য sort
+        const sorted = data.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+        setPosts(sorted);
+        setFilteredPosts(sorted);
+      })
       .catch((err) => console.error("Failed to load posts", err));
   }, []);
 
-  return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
-      <h2 className="text-3xl font-bold mb-6 text-center">All Posts</h2>
+  // Pagination logic
+  const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE);
+  const paginatedPosts = filteredPosts.slice(
+    (page - 1) * POSTS_PER_PAGE,
+    page * POSTS_PER_PAGE
+  );
 
-      {posts.length === 0 ? (
+  return (
+    <section className="max-w-6xl mx-auto px-4 py-12">
+      <h2 className="text-3xl font-bold mb-4 text-center">All Posts</h2>
+      <p className="text-center text-gray-600 text-xl mb-4">
+        ✨ A hub of stories, ideas, and inspirations — explore the details that
+        matter most.
+      </p>
+
+      {paginatedPosts.length === 0 ? (
         <p className="text-center text-gray-500">No posts found.</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {posts.map((post) => (
-            <div key={post._id} className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
-              <Link to={`/post/${post._id}`}>
-                <h3 className="text-xl font-semibold text-blue-600 hover:underline mb-2">
-                  {post.title}
-                </h3>
-              </Link>
-
-              <div className="flex items-center gap-2 mb-2 flex-wrap">
-                {post.tags?.map((tag, i) => (
-                  <span
-                    key={i}
-                    className="text-sm bg-blue-100 text-blue-700 px-2 py-1 rounded"
-                  >
-                    #{tag}
-                  </span>
-                ))}
-              </div>
-
-              <div className="flex items-center justify-between text-sm text-gray-600 mt-4">
-                <div className="flex items-center gap-2">
-                  <img
-                    src={post.authorImage || "https://i.ibb.co/M1vNYyd/avatar.png"}
-                    alt="author"
-                    className="w-8 h-8 rounded-full object-cover"
-                  />
-                  <span>{post.authorName}</span>
-                </div>
-                <span>{new Date(post.createdAt).toLocaleString()}</span>
-              </div>
-
-              <div className="flex justify-between mt-3 text-gray-600 text-sm">
-                <span>👍 {post.upVote || 0} | 👎 {post.downVote || 0}</span>
-                <span>💬 {post.commentCount || 0} Comments</span>
-              </div>
-            </div>
+          {paginatedPosts.map((post) => (
+            <PostCard key={post._id} post={post} />
           ))}
         </div>
       )}
-    </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="mt-8 flex justify-center">
+          <Pagination
+            page={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+          />
+        </div>
+      )}
+    </section>
   );
 };
 
