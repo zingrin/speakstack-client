@@ -35,7 +35,7 @@ const Notification = () => {
 
     fetchNotifications();
 
-    const interval = setInterval(fetchNotifications, 30000); // 30 sec refresh
+    const interval = setInterval(fetchNotifications, 30000); 
     return () => clearInterval(interval);
   }, []);
 
@@ -77,7 +77,7 @@ const Notification = () => {
 
       {showList && (
         <div className="absolute right-0 mt-2 w-72 rounded shadow-lg z-50 overflow-auto max-h-80">
-          <h4 className="font-semibold p-3 border-b">Notifications</h4>
+          <h4 className="font-semibold p-3 border-b bg-amber-200">Notifications</h4>
           {notifications.length === 0 ? (
             <p className="p-3 text-center text-gray-500">No notifications</p>
           ) : (
@@ -85,8 +85,8 @@ const Notification = () => {
               {notifications.map((n) => (
                 <li
                   key={n._id}
-                  className={`p-3 cursor-pointer border-b hover:bg-gray-400 ${
-                    !n.read ? "bg-blue-600 font-semibold" : ""
+                  className={`p-3 cursor-pointer border-b hover:bg-gray-700 ${
+                    !n.read ? "bg-amber-300 font-semibold" : ""
                   }`}
                   onClick={() => markAsRead(n._id)}
                   title={n.title}

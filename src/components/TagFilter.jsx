@@ -1,27 +1,41 @@
 import React, { useState } from "react";
 
-const TagFilter = ({ onChange, initialTag = "", initialSort = "newest" }) => {
+const TagFilter = ({ allPosts = [], onChange, initialTag = "", initialSort = "newest" }) => {
   const [activeTag, setActiveTag] = useState(initialTag);
   const [sortBy, setSortBy] = useState(initialSort);
   const [input, setInput] = useState("");
 
-  // Apply changes: lowercase tag & call parent
-  const applyChange = (nextTag = activeTag, nextSort = sortBy) => {
-    const tagToSend = nextTag.trim().toLowerCase();
-    setActiveTag(tagToSend);
-    setSortBy(nextSort);
-    onChange?.({ tag: tagToSend, sort: nextSort });
-  };
+  const applyChange = (tag = activeTag, sort = sortBy) => {
+    const tagQuery = tag.trim().toLowerCase();
+    setActiveTag(tagQuery);
+    setSortBy(sort);
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    applyChange(input, sortBy);
+    // Filter by tag
+    let filtered = allPosts.filter(post =>
+      post.tags?.some(t => t.toLowerCase().includes(tagQuery))
+    );
+
+    // Sort posts
+    filtered.sort((a, b) => {
+      if (sort === "newest") return new Date(b.createdAt) - new Date(a.createdAt);
+      if (sort === "oldest") return new Date(a.createdAt) - new Date(b.createdAt);
+      return 0;
+    });
+
+    // Send filtered & sorted posts to parent
+    onChange?.({ posts: filtered });
   };
 
   return (
     <div className="max-w-7xl mx-auto px-4 mt-6 flex flex-col md:flex-row gap-4 items-center justify-center">
-      {/* Search Input + Button */}
-      <form onSubmit={handleSearch} className="flex items-center gap-2 w-full md:w-auto">
+      {/* Tag Input */}
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          applyChange(input, sortBy);
+        }}
+        className="flex items-center gap-2 w-full md:w-auto"
+      >
         <input
           type="text"
           placeholder="Search by tag..."
