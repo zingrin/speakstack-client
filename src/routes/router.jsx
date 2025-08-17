@@ -28,6 +28,7 @@ import AdminProfile from "../pages/dashboard/admin/AdminProfile";
 import CommentList from "../pages/CommentList";
 import NotFound from "../pages/NotFound";
 import DashboardRedirect from "../contexts/DashboardRedirect";
+import TrendingCourseDetail from "../components/TrendingCourseDetail";
 
 const router = createBrowserRouter([
   {
@@ -53,6 +54,8 @@ const router = createBrowserRouter([
           </PrivateRoute>
         ),
       },
+              {path:"/trending/:id", element:<TrendingCourseDetail />},
+
       { path: "/allPost", element: <AllPosts></AllPosts> },
 
       { path: "/post/:id", element: <PostDetails /> },
