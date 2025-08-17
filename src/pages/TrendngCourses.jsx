@@ -1,9 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import trendingCourses from "../data/trendingCourses";
 
 const TrendingCourses = () => {
+  const [courses, setCourses] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetch("http://localhost:5000/api/trending-courses")
+      .then(res => res.json())
+      .then(data => setCourses(data))
+      .catch(err => console.error(err));
+  }, []);
 
   return (
     <section className="my-12 px-4 md:px-20">
@@ -12,9 +19,9 @@ const TrendingCourses = () => {
       </h2>
 
       <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {trendingCourses.map((course) => (
+        {courses.map((course) => (
           <div
-            key={course.id}
+            key={course._id}
             className="bg-white rounded-2xl shadow-xl overflow-hidden group hover:shadow-2xl transition"
           >
             <img
@@ -27,7 +34,7 @@ const TrendingCourses = () => {
               <p className="text-green-600 font-bold mt-1">🔥 {course.discount}</p>
               <p className="text-gray-700 font-semibold mt-1">Price: ${course.price}</p>
               <button
-                onClick={() => navigate(`/trending/${course.id}`)}
+                onClick={() => navigate(`/trending/${course._id}`)}
                 className="mt-4 btn btn-sm btn-primary rounded-full"
               >
                 View More
